@@ -1,5 +1,7 @@
 package fr.catcore.gamegui.builder;
 
+import fr.catcore.gamegui.GameGui;
+import fr.catcore.gamegui.ui.OpenConfiguredGameUi;
 import net.gegy1000.plasmid.game.ConfiguredGame;
 import net.gegy1000.plasmid.game.GameType;
 import net.gegy1000.plasmid.game.GameWorld;
@@ -9,6 +11,7 @@ import net.gegy1000.plasmid.game.player.JoinResult;
 import net.gegy1000.plasmid.util.ItemStackBuilder;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.MessageType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
@@ -52,6 +55,14 @@ public class OpenGameTypeEntry {
     }
 
     public void onClick(ServerPlayerEntity player) {
-
+        player.openHandledScreen(OpenConfiguredGameUi.create(new LiteralText("Open Game"), openConfiguredGameBuilder -> {
+            Identifier[] configs = GameGui.getConfigsFromType(this.gameType);
+            for (Identifier configuredGame : configs) {
+                openConfiguredGameBuilder.add(OpenConfiguredGameEntry
+                        .ofItem(GameGui.gameTypeItemConvertible.getOrDefault(this.gameType.toString(), Items.BARRIER))
+                        .withGameType(this.gameType)
+                        .withGameConfig(configuredGame));
+            }
+        }));
     }
 }

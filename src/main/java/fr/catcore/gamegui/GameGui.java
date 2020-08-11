@@ -3,10 +3,15 @@ package fr.catcore.gamegui;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.Reflection;
 import net.fabricmc.api.ModInitializer;
+import net.gegy1000.plasmid.game.ConfiguredGame;
+import net.gegy1000.plasmid.game.config.GameConfigs;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
+import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GameGui implements ModInitializer {
@@ -31,5 +36,14 @@ public class GameGui implements ModInitializer {
         map.put("electricfloor:electric_floor", Items.WHITE_STAINED_GLASS);
 
         gameTypeItemConvertible = new ImmutableMap.Builder<String, ItemConvertible>().putAll(map).build();
+    }
+
+    public static Identifier[] getConfigsFromType(Identifier identifier) {
+        List<Identifier> configs = new ArrayList<>();
+        for (Identifier configuredGameID : GameConfigs.getKeys()) {
+            ConfiguredGame configuredGame = GameConfigs.get(configuredGameID);
+            if (configuredGame.getType().getIdentifier() == identifier) configs.add(configuredGameID);
+        }
+        return configs.toArray(new Identifier[0]);
     }
 }

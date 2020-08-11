@@ -16,7 +16,9 @@ public class MixinPlayerManager {
 
     @Inject(at = @At("RETURN"), method = "onPlayerConnect")
     private void addCustomItem(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci) {
-        ItemStack itemStack = GameGuiCustomItems.OPEN_GAME.applyTo(new ItemStack(Items.DEBUG_STICK));
-        player.inventory.insertStack(itemStack);
+        ItemStack itemStack = GameGuiCustomItems.OPEN_GAME.applyTo(new ItemStack(Items.FILLED_MAP));
+        if (!(player.inventory.contains(itemStack) || !player.hasPermissionLevel(2))) {
+            player.inventory.insertStack(itemStack);
+        }
     }
 }
