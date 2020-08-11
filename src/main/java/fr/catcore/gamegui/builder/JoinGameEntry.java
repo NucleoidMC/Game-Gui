@@ -50,19 +50,20 @@ public class JoinGameEntry {
         return this;
     }
 
-    private JoinGameEntry withDimensionKey(RegistryKey<World> worldRegistryKey) {
+    public JoinGameEntry withDimensionKey(RegistryKey<World> worldRegistryKey) {
         this.worldRegistryKey = worldRegistryKey;
         return this;
     }
 
     public ItemStack createIcon(ServerPlayerEntity player) {
-        ConfiguredGame<?> configuredGame = GameConfigs.get(this.gameConfigId);
-        GameType<?> gameType = configuredGame.getType();
-        this.icon.addLore(new LiteralText("Game config: " + this.gameConfigId.toString()));
-        this.icon.addLore(new LiteralText("Game world: " + this.worldRegistryKey.getValue().toString()));
+//        ConfiguredGame<?> configuredGame = GameConfigs.get(this.gameConfigId);
+//        GameType<?> gameType = configuredGame.getType();
+//        this.icon.addLore(new LiteralText("Game config: " + this.gameConfigId.toString()));
+//        this.icon.addLore(new LiteralText("Game world: " + this.worldRegistryKey.getValue().toString()));
         ItemStack icon = this.icon.build().copy();
         Style style = Style.EMPTY.withItalic(false).withColor(Formatting.BLUE);
-        icon.setCustomName(new LiteralText(gameType.getIdentifier().toString()));
+//        icon.setCustomName(new LiteralText(gameType.getIdentifier().toString()));
+        icon.setCustomName(new LiteralText(this.worldRegistryKey.getValue().toString()));
         return icon;
     }
 

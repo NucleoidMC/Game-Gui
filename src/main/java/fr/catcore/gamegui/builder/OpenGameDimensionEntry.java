@@ -81,6 +81,7 @@ public class OpenGameDimensionEntry {
                 GameWorld gameWorld1 = gameWorld.getOpenWorld();
                 gameWorld1.offerPlayer(player);
             } else {
+                player.closeHandledScreen();
                 Plasmid.LOGGER.error("Failed to start game", throwable);
                 playerManager.broadcastChatMessage(new LiteralText("An exception occurred while trying to start game"), MessageType.SYSTEM, Util.NIL_UUID);
             }

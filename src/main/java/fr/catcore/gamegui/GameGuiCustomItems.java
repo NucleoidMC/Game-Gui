@@ -1,5 +1,6 @@
 package fr.catcore.gamegui;
 
+import fr.catcore.gamegui.builder.JoinGameEntry;
 import fr.catcore.gamegui.builder.OpenGameTypeEntry;
 import fr.catcore.gamegui.ui.JoinGameUi;
 import fr.catcore.gamegui.ui.OpenGameTypeUi;
@@ -22,9 +23,10 @@ public class GameGuiCustomItems {
                     for (ServerWorld serverWorld : playerEntity.getServer().getWorlds()) {
                         GameWorldState gameWorldState = GameWorldState.forWorld(serverWorld);
                         if (gameWorldState == null) continue;
+                        if (!gameWorldState.isOpen()) continue;
                         GameWorld gameWorld = gameWorldState.getOpenWorld();
                         if (gameWorld == null) continue;
-
+                        joinGameBuilder.add(JoinGameEntry.ofItem(Items.CONDUIT).withDimensionKey(serverWorld.getRegistryKey()));
                     }
                 }));
                 return TypedActionResult.fail(null);
