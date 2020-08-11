@@ -1,7 +1,6 @@
 package fr.catcore.gamegui.builder;
 
 import xyz.nucleoid.plasmid.game.GameWorld;
-import xyz.nucleoid.plasmid.game.GameWorldState;
 import xyz.nucleoid.plasmid.game.player.JoinResult;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 import net.minecraft.item.ItemConvertible;
@@ -66,11 +65,7 @@ public class JoinGameEntry {
         if (serverWorld == null) {
             throw new NullPointerException();
         }
-        GameWorldState gameWorld = GameWorldState.forWorld(serverWorld);
-        if (gameWorld == null) {
-            throw new NullPointerException();
-        }
-        GameWorld openWorld = gameWorld.getOpenWorld();
+        GameWorld openWorld = GameWorld.forWorld(serverWorld);
         if (openWorld == null) {
 
         } else {
