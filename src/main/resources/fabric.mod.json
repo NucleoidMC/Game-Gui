@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "game_gui",
+  "version": "${version}",
+  "name": "Game Gui",
+  "description": "",
+  "authors": [
+    "CatCore"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/game_gui/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "fr.catcore.gamegui.GameGui"
+    ]
+  },
+  "mixins": [
+    "game_gui.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.9.1+build.205",
+    "fabric": "*",
+    "minecraft": "1.16.1"
+  }
+}
