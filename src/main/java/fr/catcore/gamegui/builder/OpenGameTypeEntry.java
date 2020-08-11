@@ -2,29 +2,15 @@ package fr.catcore.gamegui.builder;
 
 import fr.catcore.gamegui.GameGui;
 import fr.catcore.gamegui.ui.OpenConfiguredGameUi;
-import net.gegy1000.plasmid.game.ConfiguredGame;
-import net.gegy1000.plasmid.game.GameType;
-import net.gegy1000.plasmid.game.GameWorld;
-import net.gegy1000.plasmid.game.GameWorldState;
-import net.gegy1000.plasmid.game.config.GameConfigs;
-import net.gegy1000.plasmid.game.player.JoinResult;
-import net.gegy1000.plasmid.util.ItemStackBuilder;
+import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.network.MessageType;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.world.World;
 
 public class OpenGameTypeEntry {
     private final ItemStackBuilder icon;

@@ -1,8 +1,8 @@
 package fr.catcore.gamegui.builder;
 
 import fr.catcore.gamegui.ui.OpenGameDimensionUi;
-import net.gegy1000.plasmid.game.GameWorldState;
-import net.gegy1000.plasmid.util.ItemStackBuilder;
+import xyz.nucleoid.plasmid.game.GameWorldState;
+import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;

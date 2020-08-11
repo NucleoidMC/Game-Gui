@@ -1,11 +1,11 @@
 package fr.catcore.gamegui.builder;
 
-import net.gegy1000.plasmid.Plasmid;
-import net.gegy1000.plasmid.game.ConfiguredGame;
-import net.gegy1000.plasmid.game.GameWorld;
-import net.gegy1000.plasmid.game.GameWorldState;
-import net.gegy1000.plasmid.game.config.GameConfigs;
-import net.gegy1000.plasmid.util.ItemStackBuilder;
+import xyz.nucleoid.plasmid.Plasmid;
+import xyz.nucleoid.plasmid.game.ConfiguredGame;
+import xyz.nucleoid.plasmid.game.GameWorld;
+import xyz.nucleoid.plasmid.game.GameWorldState;
+import xyz.nucleoid.plasmid.game.config.GameConfigs;
+import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.MessageType;
