@@ -20,6 +20,8 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.concurrent.CompletableFuture;
 
 public class OpenConfiguredGameEntry {
     private final ItemStackBuilder icon;
@@ -62,52 +64,66 @@ public class OpenConfiguredGameEntry {
         PlayerManager playerManager = server.getPlayerManager();
         LiteralText announcement = new LiteralText("Game is opening! Hold tight..");
         playerManager.broadcastChatMessage(announcement.formatted(Formatting.GRAY), MessageType.SYSTEM, Util.NIL_UUID);
+        server.submit(() -> {
+            try {
+                game.open(server).handle((v, throwable) -> {
+                    if (throwable == null) {
+                        String command = "/game join";
+                        ClickEvent joinClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
+                        HoverEvent joinHover = new HoverEvent(net.minecraft.text.HoverEvent.Action.SHOW_TEXT, new LiteralText(command));
+                        Style joinStyle = Style.EMPTY.withFormatting(Formatting.UNDERLINE).withColor(Formatting.BLUE).withClickEvent(joinClick).withHoverEvent(joinHover);
+                        Text openMessage = (new LiteralText("Game has opened! ")).append((new LiteralText("Click here to join")).setStyle(joinStyle));
+                        playerManager.broadcastChatMessage(openMessage, MessageType.SYSTEM, Util.NIL_UUID);
+                        Collection<GameWorld> games = GameWorld.getOpen();
+                        GameWorld gameWorld = (GameWorld)games.stream().findFirst().orElse((GameWorld) (Object)null);
+                        if (gameWorld != null) {
+                            CompletableFuture<JoinResult> resultFuture = CompletableFuture.supplyAsync(() -> {
+                                return gameWorld.offerPlayer(player);
+                            }, server);
+                            resultFuture.thenAccept((joinResult) -> {
+                                if (joinResult.isErr()) {
+                                    player.closeHandledScreen();
+                                    Text error = joinResult.getError();
+                                    player.sendMessage(error.shallowCopy().formatted(Formatting.RED), false);
+                                } else {
+                                    Text joinMessage = player.getDisplayName().shallowCopy().append(" has joined the game lobby!").formatted(Formatting.YELLOW);
+                                    Iterator var5 = gameWorld.getPlayers().iterator();
 
-        try {
-            game.open(server).handle((v, throwable) -> {
-                if (throwable == null) {
-                    String command = "/game join";
-                    ClickEvent joinClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
-                    HoverEvent joinHover = new HoverEvent(net.minecraft.text.HoverEvent.Action.SHOW_TEXT, new LiteralText(command));
-                    Style joinStyle = Style.EMPTY.withFormatting(Formatting.UNDERLINE).withColor(Formatting.BLUE).withClickEvent(joinClick).withHoverEvent(joinHover);
-                    Text openMessage = (new LiteralText("Game has opened! ")).append((new LiteralText("Click here to join")).setStyle(joinStyle));
-                    playerManager.broadcastChatMessage(openMessage, MessageType.SYSTEM, Util.NIL_UUID);
-                    Collection<GameWorld> games = GameWorld.getOpen();
-                    GameWorld gameWorld = (GameWorld)games.stream().findFirst().orElse((GameWorld) (Object)null);
-                    if (gameWorld != null) {
-                        JoinResult joinResult = gameWorld.offerPlayer(player);
-                        if (joinResult.isErr()) {
-                            Text error = joinResult.getError().shallowCopy().formatted(Formatting.RED);
-                            playerManager.broadcastChatMessage(error, MessageType.SYSTEM, Util.NIL_UUID);
-                        } else {
-                            Text joinMessage = player.getDisplayName().shallowCopy().append(" has joined the game lobby!").setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
-                            playerManager.broadcastChatMessage(joinMessage, MessageType.SYSTEM, Util.NIL_UUID);
+                                    while(var5.hasNext()) {
+                                        ServerPlayerEntity otherPlayer = (ServerPlayerEntity)var5.next();
+                                        otherPlayer.sendMessage(joinMessage, false);
+                                    }
+
+                                }
+                            });
                         }
-                    }
-                } else {
-                    Plasmid.LOGGER.error("Failed to start game", throwable);
-                    Object message;
-                    if (throwable instanceof GameOpenException) {
-                        message = ((GameOpenException)throwable).getReason().shallowCopy();
                     } else {
-                        message = new LiteralText("The game threw an unexpected error while starting!");
+                        player.closeHandledScreen();
+                        Plasmid.LOGGER.error("Failed to start game", throwable);
+                        Object message;
+                        if (throwable instanceof GameOpenException) {
+                            message = ((GameOpenException)throwable).getReason().shallowCopy();
+                        } else {
+                            message = new LiteralText("The game threw an unexpected error while starting!");
+                        }
+
+                        playerManager.broadcastChatMessage(((MutableText)message).formatted(Formatting.RED), MessageType.SYSTEM, Util.NIL_UUID);
                     }
 
-                    playerManager.broadcastChatMessage(((MutableText)message).formatted(Formatting.RED), MessageType.SYSTEM, Util.NIL_UUID);
+                    return null;
+                });
+            } catch (Throwable throwable) {
+                player.closeHandledScreen();
+                Plasmid.LOGGER.error("Failed to start game", throwable);
+                Object message;
+                if (throwable instanceof GameOpenException) {
+                    message = ((GameOpenException)throwable).getReason().shallowCopy();
+                } else {
+                    message = new LiteralText("The game threw an unexpected error while starting!");
                 }
 
-                return null;
-            });
-        } catch (Throwable throwable) {
-            Plasmid.LOGGER.error("Failed to start game", throwable);
-            Object message;
-            if (throwable instanceof GameOpenException) {
-                message = ((GameOpenException)throwable).getReason().shallowCopy();
-            } else {
-                message = new LiteralText("The game threw an unexpected error while starting!");
+                playerManager.broadcastChatMessage(((MutableText)message).formatted(Formatting.RED), MessageType.SYSTEM, Util.NIL_UUID);
             }
-
-            playerManager.broadcastChatMessage(((MutableText)message).formatted(Formatting.RED), MessageType.SYSTEM, Util.NIL_UUID);
-        }
+        });
     }
 }

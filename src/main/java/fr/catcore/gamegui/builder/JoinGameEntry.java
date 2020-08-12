@@ -19,6 +19,9 @@ import net.minecraft.util.Util;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 
+import java.util.Iterator;
+import java.util.concurrent.CompletableFuture;
+
 public class JoinGameEntry {
     private final ItemStackBuilder icon;
     private Identifier gameConfigId;
@@ -60,22 +63,33 @@ public class JoinGameEntry {
 
     public void onClick(ServerPlayerEntity player) {
         MinecraftServer minecraftServer = player.getServer();
-        PlayerManager playerManager = minecraftServer.getPlayerManager();
         ServerWorld serverWorld = minecraftServer.getWorld(this.worldRegistryKey);
         if (serverWorld == null) {
             throw new NullPointerException();
         }
         GameWorld openWorld = GameWorld.forWorld(serverWorld);
         if (openWorld == null) {
-
+            player.closeHandledScreen();
         } else {
-            JoinResult joinResult = openWorld.offerPlayer(player);
-            if (joinResult.isErr()) {
-                Text error = joinResult.getError();
-            } else {
-                Text joinMessage = player.getDisplayName().shallowCopy().append(" has joined the game lobby!").setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
-                playerManager.broadcastChatMessage(joinMessage, MessageType.SYSTEM, Util.NIL_UUID);
-            }
+            CompletableFuture<JoinResult> resultFuture = CompletableFuture.supplyAsync(() -> {
+                return openWorld.offerPlayer(player);
+            }, minecraftServer);
+            resultFuture.thenAccept((joinResult) -> {
+                if (joinResult.isErr()) {
+                    player.closeHandledScreen();
+                    Text error = joinResult.getError();
+                    player.sendMessage(error.shallowCopy().formatted(Formatting.RED), false);
+                } else {
+                    Text joinMessage = player.getDisplayName().shallowCopy().append(" has joined the game lobby!").formatted(Formatting.YELLOW);
+                    Iterator var5 = openWorld.getPlayers().iterator();
+
+                    while(var5.hasNext()) {
+                        ServerPlayerEntity otherPlayer = (ServerPlayerEntity)var5.next();
+                        otherPlayer.sendMessage(joinMessage, false);
+                    }
+
+                }
+            });
         }
     }
 }
