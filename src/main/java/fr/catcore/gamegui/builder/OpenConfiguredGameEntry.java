@@ -1,7 +1,6 @@
 package fr.catcore.gamegui.builder;
 
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import net.minecraft.command.arguments.IdentifierArgumentType;
 import net.minecraft.network.MessageType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
@@ -70,7 +69,7 @@ public class OpenConfiguredGameEntry {
                     String command = "/game join";
                     ClickEvent joinClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
                     HoverEvent joinHover = new HoverEvent(net.minecraft.text.HoverEvent.Action.SHOW_TEXT, new LiteralText(command));
-                    Style joinStyle = Style.EMPTY.withFormatting(Formatting.UNDERLINE).withColor(Formatting.BLUE).withClickEvent(joinClick).setHoverEvent(joinHover);
+                    Style joinStyle = Style.EMPTY.withFormatting(Formatting.UNDERLINE).withColor(Formatting.BLUE).withClickEvent(joinClick).withHoverEvent(joinHover);
                     Text openMessage = (new LiteralText("Game has opened! ")).append((new LiteralText("Click here to join")).setStyle(joinStyle));
                     playerManager.broadcastChatMessage(openMessage, MessageType.SYSTEM, Util.NIL_UUID);
                     Collection<GameWorld> games = GameWorld.getOpen();
