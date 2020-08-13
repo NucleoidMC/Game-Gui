@@ -1,6 +1,9 @@
 package fr.catcore.gamegui.builder;
 
+import xyz.nucleoid.plasmid.game.ConfiguredGame;
+import xyz.nucleoid.plasmid.game.GameType;
 import xyz.nucleoid.plasmid.game.GameWorld;
+import xyz.nucleoid.plasmid.game.config.GameConfigs;
 import xyz.nucleoid.plasmid.game.player.JoinResult;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 import net.minecraft.item.ItemConvertible;
@@ -50,13 +53,11 @@ public class JoinGameEntry {
     }
 
     public ItemStack createIcon(ServerPlayerEntity player) {
-//        ConfiguredGame<?> configuredGame = GameConfigs.get(this.gameConfigId);
-//        GameType<?> gameType = configuredGame.getType();
-//        this.icon.addLore(new LiteralText("Game config: " + this.gameConfigId.toString()));
-//        this.icon.addLore(new LiteralText("Game world: " + this.worldRegistryKey.getValue().toString()));
+        ConfiguredGame<?> configuredGame = GameConfigs.get(this.gameConfigId);
+        GameType<?> gameType = configuredGame.getType();
+        this.icon.addLore(new LiteralText("Game config: " + this.gameConfigId.toString()));
+        this.icon.addLore(new LiteralText("Game type: " + gameType.getIdentifier().toString()));
         ItemStack icon = this.icon.build().copy();
-        Style style = Style.EMPTY.withItalic(false).withColor(Formatting.BLUE);
-//        icon.setCustomName(new LiteralText(gameType.getIdentifier().toString()));
         icon.setCustomName(new LiteralText(this.worldRegistryKey.getValue().toString()));
         return icon;
     }
