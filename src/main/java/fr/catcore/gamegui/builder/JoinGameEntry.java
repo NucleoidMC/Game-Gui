@@ -26,12 +26,12 @@ import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 
 public class JoinGameEntry {
-    private final ItemStackBuilder icon;
+    private final ItemStack icon;
     private Identifier gameConfigId;
     private RegistryKey<World> worldRegistryKey;
 
     private JoinGameEntry(ItemStack icon) {
-        this.icon = ItemStackBuilder.of(icon);
+        this.icon = icon;
     }
 
     public static JoinGameEntry ofItem(ItemStack icon) {
@@ -55,9 +55,10 @@ public class JoinGameEntry {
     public ItemStack createIcon(ServerPlayerEntity player) {
         ConfiguredGame<?> configuredGame = GameConfigs.get(this.gameConfigId);
         GameType<?> gameType = configuredGame.getType();
-        this.icon.addLore(new LiteralText("Game config: " + this.gameConfigId.toString()));
-        this.icon.addLore(new LiteralText("Game type: " + gameType.getIdentifier().toString()));
-        ItemStack icon = this.icon.build().copy();
+        ItemStackBuilder iconBuilder = ItemStackBuilder.of(this.icon);
+        iconBuilder.addLore(new LiteralText("Game config: " + this.gameConfigId.toString()));
+        iconBuilder.addLore(new LiteralText("Game type: " + gameType.getIdentifier().toString()));
+        ItemStack icon = iconBuilder.build().copy();
         icon.setCustomName(new LiteralText(this.worldRegistryKey.getValue().toString()));
         return icon;
     }
