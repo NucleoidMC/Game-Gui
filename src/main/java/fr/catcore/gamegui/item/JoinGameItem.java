@@ -18,17 +18,10 @@ import xyz.nucleoid.plasmid.game.ConfiguredGame;
 import xyz.nucleoid.plasmid.game.GameWorld;
 import xyz.nucleoid.plasmid.game.config.GameConfigs;
 
-public final class JoinGameItem extends Item implements FakeItem<Item> {
+public final class JoinGameItem extends Item implements FakeItem {
 
     public JoinGameItem(Settings settings) {
         super(settings);
-    }
-
-    @Override
-    public ItemStack getFaking(ItemStack stack) {
-        ItemStack fake = FakeItem.super.getFaking(stack);
-        fake.setCustomName(stack.getName());
-        return fake;
     }
 
     @Override
@@ -62,7 +55,7 @@ public final class JoinGameItem extends Item implements FakeItem<Item> {
     }
 
     @Override
-    public Item getFaking() {
+    public Item asProxy() {
         return Items.COMPASS;
     }
 }

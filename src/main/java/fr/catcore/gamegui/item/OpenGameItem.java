@@ -16,16 +16,9 @@ import net.minecraft.world.World;
 import xyz.nucleoid.plasmid.fake.FakeItem;
 import xyz.nucleoid.plasmid.game.GameType;
 
-public class OpenGameItem extends Item implements FakeItem<Item> {
+public class OpenGameItem extends Item implements FakeItem {
     public OpenGameItem(Settings settings) {
         super(settings);
-    }
-
-    @Override
-    public ItemStack getFaking(ItemStack stack) {
-        ItemStack fake = FakeItem.super.getFaking(stack);
-        fake.setCustomName(stack.getName());
-        return fake;
     }
 
     @Override
@@ -49,7 +42,7 @@ public class OpenGameItem extends Item implements FakeItem<Item> {
     }
 
     @Override
-    public Item getFaking() {
+    public Item asProxy() {
         return Items.PAPER;
     }
 }
