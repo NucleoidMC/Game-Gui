@@ -55,6 +55,12 @@ public final class JoinGameItem extends Item implements FakeItem {
     }
 
     @Override
+    public ItemStack asProxy(ItemStack stack) {
+        stack.setCustomName(this.getName(stack));
+        return stack;
+    }
+
+    @Override
     public Item asProxy() {
         return Items.COMPASS;
     }
