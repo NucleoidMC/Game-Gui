@@ -1,5 +1,6 @@
 package fr.catcore.gamegui.item;
 
+import fr.catcore.gamegui.GameGui;
 import fr.catcore.gamegui.builder.JoinGameEntry;
 import fr.catcore.gamegui.ui.JoinGameUi;
 import net.minecraft.entity.player.PlayerEntity;
@@ -41,14 +42,14 @@ public final class JoinGameItem extends Item implements FakeItem {
                 GameWorld gameWorld = GameWorld.forWorld(serverWorld);
                 if (gameWorld == null) continue;
                 ConfiguredGame<?> configuredGame = gameWorld.getGame();
-                Identifier gameID = null;
+                Identifier gameID = new Identifier("game-gui", "null");
                 for (Identifier id : GameConfigs.getKeys()) {
                     if (GameConfigs.get(id) == configuredGame) {
                         gameID = id;
                         break;
                     }
                 }
-                joinGameBuilder.add(JoinGameEntry.ofItem(Items.CONDUIT).withDimensionKey(serverWorld.getRegistryKey()).withGameConfig(gameID));
+                joinGameBuilder.add(JoinGameEntry.ofItem(GameGui.gameTypeItemConvertible.getOrDefault(gameID.toString(), Items.BARRIER)).withDimensionKey(serverWorld.getRegistryKey()).withGameConfig(gameID));
             }
         }));
         return TypedActionResult.success(playerEntity.getStackInHand(hand));

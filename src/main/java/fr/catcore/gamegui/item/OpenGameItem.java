@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import xyz.nucleoid.plasmid.fake.FakeItem;
 import xyz.nucleoid.plasmid.game.GameType;
 
-public class OpenGameItem extends Item implements FakeItem {
+public final class OpenGameItem extends Item implements FakeItem {
     public OpenGameItem(Settings settings) {
         super(settings);
     }
