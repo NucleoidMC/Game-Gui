@@ -37,7 +37,7 @@ public class GameGui implements ModInitializer {
         map.put("ascension:ascension", Items.RABBIT_FOOT);
         map.put("withersweeper:withersweeper", Items.SOUL_SOIL);
         map.put("shardthief:shard_thief", Items.PRISMARINE_SHARD);
-        map.put("murder_mystery:murder_mystery", Items.STONE_SWORD);
+        map.put("murder_mystery:murder_mystery", Items.NETHERITE_SWORD);
         map.put("wavedefense:wavedefense", Items.ZOMBIE_HEAD);
         map.put("koth:koth", Items.LADDER);
         map.put("clutchbridge:clutch_bridge", Items.MAGENTA_GLAZED_TERRACOTTA);
