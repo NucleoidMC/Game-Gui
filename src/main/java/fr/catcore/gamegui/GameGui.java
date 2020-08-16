@@ -3,6 +3,8 @@ package fr.catcore.gamegui;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.Reflection;
 import net.fabricmc.api.ModInitializer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import xyz.nucleoid.plasmid.game.ConfiguredGame;
 import xyz.nucleoid.plasmid.game.config.GameConfigs;
 import net.minecraft.item.ItemConvertible;
@@ -17,6 +19,8 @@ import java.util.Map;
 public class GameGui implements ModInitializer {
 
     public static final Map<String, ItemConvertible> gameTypeItemConvertible;
+
+    public static final Logger LOGGER = LogManager.getLogger();
 
     @Override
     public void onInitialize() {
