@@ -36,7 +36,7 @@ public class OpenGameTypeEntry {
     public ItemStack createIcon(ServerPlayerEntity player) {
         ItemStack icon = this.icon.build().copy();
         Style style = Style.EMPTY.withItalic(false).withColor(Formatting.BLUE);
-        icon.setCustomName(new LiteralText(gameType.toString()));
+        icon.setCustomName(new LiteralText(GameGui.getGameInfos(this.gameType).getName()));
         return icon;
     }
 
@@ -45,7 +45,7 @@ public class OpenGameTypeEntry {
             Identifier[] configs = GameGui.getConfigsFromType(this.gameType);
             for (Identifier configuredGame : configs) {
                 openConfiguredGameBuilder.add(OpenConfiguredGameEntry
-                        .ofItem(GameGui.gameTypeItemConvertible.getOrDefault(this.gameType.toString(), Items.BARRIER))
+                        .ofItem(GameGui.getGameInfos(this.gameType).getIcon())
                         .withGameType(this.gameType)
                         .withGameConfig(configuredGame));
             }

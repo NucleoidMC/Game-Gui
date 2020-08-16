@@ -1,5 +1,6 @@
 package fr.catcore.gamegui.builder;
 
+import fr.catcore.gamegui.GameGui;
 import xyz.nucleoid.plasmid.game.ConfiguredGame;
 import xyz.nucleoid.plasmid.game.GameType;
 import xyz.nucleoid.plasmid.game.GameWorld;
@@ -57,7 +58,7 @@ public class JoinGameEntry {
         GameType<?> gameType = configuredGame.getType();
         ItemStackBuilder iconBuilder = ItemStackBuilder.of(this.icon);
         iconBuilder.addLore(new LiteralText("Game config: " + this.gameConfigId.toString()));
-        iconBuilder.addLore(new LiteralText("Game type: " + gameType.getIdentifier().toString()));
+        iconBuilder.addLore(new LiteralText("Game type: " + GameGui.getGameInfos(gameType.getIdentifier()).getName()));
         ItemStack icon = iconBuilder.build().copy();
         icon.setCustomName(new LiteralText(this.worldRegistryKey.getValue().toString()));
         return icon;

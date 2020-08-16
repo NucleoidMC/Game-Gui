@@ -49,7 +49,7 @@ public final class JoinGameItem extends Item implements FakeItem {
                         break;
                     }
                 }
-                joinGameBuilder.add(JoinGameEntry.ofItem(GameGui.gameTypeItemConvertible.getOrDefault(configuredGame.getType().getIdentifier().toString(), Items.BARRIER)).withDimensionKey(serverWorld.getRegistryKey()).withGameConfig(gameID));
+                joinGameBuilder.add(JoinGameEntry.ofItem(GameGui.getGameInfos(configuredGame.getType().getIdentifier()).getIcon()).withDimensionKey(serverWorld.getRegistryKey()).withGameConfig(gameID));
             }
         }));
         return TypedActionResult.success(playerEntity.getStackInHand(hand));

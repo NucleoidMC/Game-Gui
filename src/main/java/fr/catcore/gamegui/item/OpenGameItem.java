@@ -1,7 +1,7 @@
 package fr.catcore.gamegui.item;
 
 import fr.catcore.gamegui.GameGui;
-import fr.catcore.gamegui.Utils;
+import fr.catcore.gamegui.util.Utils;
 import fr.catcore.gamegui.builder.OpenGameTypeEntry;
 import fr.catcore.gamegui.ui.OpenGameTypeUi;
 import net.minecraft.entity.player.PlayerEntity;
@@ -38,7 +38,7 @@ public final class OpenGameItem extends Item implements FakeItem {
         if (!Utils.hasOpenPermission((ServerPlayerEntity) playerEntity)) return TypedActionResult.fail(playerEntity.getStackInHand(hand));
         playerEntity.openHandledScreen(OpenGameTypeUi.create(new LiteralText("Open Game"), openGameTypeBuilder -> {
             for (Identifier gameType : GameType.REGISTRY.keySet()) {
-                openGameTypeBuilder.add(OpenGameTypeEntry.ofItem(GameGui.gameTypeItemConvertible.getOrDefault(gameType.toString(), Items.BARRIER)).withGameType(gameType));
+                openGameTypeBuilder.add(OpenGameTypeEntry.ofItem(GameGui.getGameInfos(gameType).getIcon()).withGameType(gameType));
             }
         }));
         return TypedActionResult.success(playerEntity.getStackInHand(hand));

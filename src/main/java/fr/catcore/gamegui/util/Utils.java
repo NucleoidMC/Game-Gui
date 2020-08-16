@@ -1,4 +1,4 @@
-package fr.catcore.gamegui;
+package fr.catcore.gamegui.util;
 
 import com.mojang.brigadier.tree.CommandNode;
 import net.minecraft.server.command.ServerCommandSource;
