@@ -59,6 +59,19 @@ public class JoinGameEntry {
         ItemStackBuilder iconBuilder = ItemStackBuilder.of(this.icon);
         iconBuilder.addLore(new LiteralText("Game config: " + this.gameConfigId.toString()));
         iconBuilder.addLore(new LiteralText("Game type: " + GameGui.getGameInfos(gameType.getIdentifier()).getName()));
+
+        MinecraftServer minecraftServer = player.getServer();
+        ServerWorld serverWorld = minecraftServer.getWorld(this.worldRegistryKey);
+        if (serverWorld == null) {
+            throw new NullPointerException();
+        }
+        GameWorld openWorld = GameWorld.forWorld(serverWorld);
+        if (openWorld == null) {
+            player.closeHandledScreen();
+        }
+        int playerCount = openWorld.getPlayerCount();
+        iconBuilder.addLore(new LiteralText("Player count: " + playerCount));
+
         ItemStack icon = iconBuilder.build().copy();
         icon.setCustomName(new LiteralText(this.worldRegistryKey.getValue().toString()));
         return icon;
@@ -74,24 +87,12 @@ public class JoinGameEntry {
         if (openWorld == null) {
             player.closeHandledScreen();
         } else {
-            CompletableFuture<JoinResult> resultFuture = CompletableFuture.supplyAsync(() -> {
-                return openWorld.offerPlayer(player);
-            }, minecraftServer);
-            resultFuture.thenAccept((joinResult) -> {
-                if (joinResult.isErr()) {
-                    player.closeHandledScreen();
+            openWorld.offerPlayer(player).thenAccept((joinResult) -> {
+                if (joinResult.isError()) {
                     Text error = joinResult.getError();
-                    player.sendMessage(error.shallowCopy().formatted(Formatting.RED), false);
-                } else {
-                    Text joinMessage = player.getDisplayName().shallowCopy().append(" has joined the game lobby!").formatted(Formatting.YELLOW);
-                    Iterator var5 = openWorld.getPlayers().iterator();
-
-                    while(var5.hasNext()) {
-                        ServerPlayerEntity otherPlayer = (ServerPlayerEntity)var5.next();
-                        otherPlayer.sendMessage(joinMessage, false);
-                    }
-
+                    player.sendMessage(error.shallowCopy().formatted(Formatting.RED), MessageType.CHAT, Util.NIL_UUID);
                 }
+
             });
         }
     }

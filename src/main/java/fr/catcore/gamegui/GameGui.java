@@ -51,7 +51,7 @@ public class GameGui implements ModInitializer {
     }
 
     public static GameInfos getGameInfos(String id) {
-        return gameTypeInfos.getOrDefault(id, new GameInfos("unknown", Items.BARRIER));
+        return gameTypeInfos.getOrDefault(id, new GameInfos(id, Items.BARRIER));
     }
 
     public static GameInfos getGameInfos(Identifier identifier) {
