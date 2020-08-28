@@ -69,7 +69,10 @@ public class JoinGameEntry {
         if (openWorld == null) {
             player.closeHandledScreen();
         }
-        int playerCount = openWorld.getPlayerCount();
+        int playerCount = 0;
+        try {
+            playerCount = openWorld.getPlayerCount();
+        } catch (NullPointerException e) {}
         iconBuilder.addLore(new LiteralText("Player count: " + playerCount));
 
         ItemStack icon = iconBuilder.build().copy();
