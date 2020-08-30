@@ -1,6 +1,10 @@
 package fr.catcore.gamegui.builder;
 
 import fr.catcore.gamegui.GameGui;
+import fr.catcore.gamegui.item.JoinGameItem;
+import fr.catcore.server.translations.api.LocalizableText;
+import fr.catcore.server.translations.api.LocalizationTarget;
+import net.minecraft.text.TranslatableText;
 import xyz.nucleoid.plasmid.game.ConfiguredGame;
 import xyz.nucleoid.plasmid.game.GameType;
 import xyz.nucleoid.plasmid.game.GameWorld;
@@ -57,23 +61,25 @@ public class JoinGameEntry {
         ConfiguredGame<?> configuredGame = GameConfigs.get(this.gameConfigId);
         GameType<?> gameType = configuredGame.getType();
         ItemStackBuilder iconBuilder = ItemStackBuilder.of(this.icon);
-        iconBuilder.addLore(new LiteralText("Game config: " + this.gameConfigId.toString()));
-        iconBuilder.addLore(new LiteralText("Game type: " + GameGui.getGameInfos(gameType.getIdentifier()).getName()));
+        iconBuilder.addLore(LocalizableText.asLocalizedFor(new TranslatableText("text.game_gui.join.config", GameGui.getGameConfigName(this.gameConfigId)), (LocalizationTarget) player));
+        iconBuilder.addLore(LocalizableText.asLocalizedFor(new TranslatableText("text.game_gui.join.type", GameGui.getGameTypeName(gameType.getIdentifier())), (LocalizationTarget) player));
 
         MinecraftServer minecraftServer = player.getServer();
         ServerWorld serverWorld = minecraftServer.getWorld(this.worldRegistryKey);
         if (serverWorld == null) {
-            throw new NullPointerException();
+            player.closeHandledScreen();
+            JoinGameItem.openJoinScreen(player);
         }
         GameWorld openWorld = GameWorld.forWorld(serverWorld);
         if (openWorld == null) {
             player.closeHandledScreen();
+            JoinGameItem.openJoinScreen(player);
         }
         int playerCount = 0;
         try {
             playerCount = openWorld.getPlayerCount();
         } catch (NullPointerException e) {}
-        iconBuilder.addLore(new LiteralText("Player count: " + playerCount));
+        iconBuilder.addLore(LocalizableText.asLocalizedFor(new TranslatableText("text.game_gui.join.player_count", playerCount), (LocalizationTarget) player));
 
         ItemStack icon = iconBuilder.build().copy();
         icon.setCustomName(new LiteralText(this.worldRegistryKey.getValue().toString()));

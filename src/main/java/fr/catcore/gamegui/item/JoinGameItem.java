@@ -3,6 +3,8 @@ package fr.catcore.gamegui.item;
 import fr.catcore.gamegui.GameGui;
 import fr.catcore.gamegui.builder.JoinGameEntry;
 import fr.catcore.gamegui.ui.JoinGameUi;
+import fr.catcore.server.translations.api.LocalizableText;
+import fr.catcore.server.translations.api.LocalizationTarget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,6 +12,7 @@ import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
@@ -37,7 +40,12 @@ public final class JoinGameItem extends Item implements FakeItem {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity playerEntity, Hand hand) {
-        playerEntity.openHandledScreen(JoinGameUi.create(new LiteralText("Join Game"), joinGameBuilder -> {
+        openJoinScreen(playerEntity);
+        return TypedActionResult.success(playerEntity.getStackInHand(hand));
+    }
+
+    public static void openJoinScreen(PlayerEntity playerEntity) {
+        playerEntity.openHandledScreen(JoinGameUi.create(LocalizableText.asLocalizedFor(new TranslatableText("text.game_gui.gui.join"), (LocalizationTarget) playerEntity), joinGameBuilder -> {
             for (ServerWorld serverWorld : playerEntity.getServer().getWorlds()) {
                 GameWorld gameWorld = GameWorld.forWorld(serverWorld);
                 if (gameWorld == null) continue;
@@ -52,7 +60,6 @@ public final class JoinGameItem extends Item implements FakeItem {
                 joinGameBuilder.add(JoinGameEntry.ofItem(GameGui.getGameInfos(configuredGame.getType().getIdentifier()).getIcon()).withDimensionKey(serverWorld.getRegistryKey()).withGameConfig(gameID));
             }
         }));
-        return TypedActionResult.success(playerEntity.getStackInHand(hand));
     }
 
     @Override

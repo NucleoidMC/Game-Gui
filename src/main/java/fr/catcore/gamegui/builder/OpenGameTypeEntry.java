@@ -2,6 +2,10 @@ package fr.catcore.gamegui.builder;
 
 import fr.catcore.gamegui.GameGui;
 import fr.catcore.gamegui.ui.OpenConfiguredGameUi;
+import fr.catcore.server.translations.api.LocalizableText;
+import fr.catcore.server.translations.api.LocalizationTarget;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -13,11 +17,11 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 public class OpenGameTypeEntry {
-    private final ItemStackBuilder icon;
+    private final ItemStack icon;
     private Identifier gameType;
 
     private OpenGameTypeEntry(ItemStack icon) {
-        this.icon = ItemStackBuilder.of(icon);
+        this.icon = icon;
     }
 
     public static OpenGameTypeEntry ofItem(ItemStack icon) {
@@ -34,19 +38,21 @@ public class OpenGameTypeEntry {
     }
 
     public ItemStack createIcon(ServerPlayerEntity player) {
-        ItemStack icon = this.icon.build().copy();
-        Style style = Style.EMPTY.withItalic(false).withColor(Formatting.BLUE);
-        icon.setCustomName(new LiteralText(GameGui.getGameInfos(this.gameType).getName()));
-        return icon;
+        ItemStackBuilder builder = ItemStackBuilder.of(this.icon);
+        builder.setName(LocalizableText.asLocalizedFor(GameGui.getGameTypeName(this.gameType), (LocalizationTarget) player));
+        for (Text text : GameGui.getGameTypeDescription(this.gameType)) {
+            builder.addLore(LocalizableText.asLocalizedFor(text, (LocalizationTarget) player));
+        }
+        return builder.build().copy();
     }
 
     public void onClick(ServerPlayerEntity player) {
-        player.openHandledScreen(OpenConfiguredGameUi.create(new LiteralText("Open Game"), openConfiguredGameBuilder -> {
+        player.openHandledScreen(OpenConfiguredGameUi.create(LocalizableText.asLocalizedFor(new TranslatableText("text.game_gui.gui.open"), (LocalizationTarget) player),
+                openConfiguredGameBuilder -> {
             Identifier[] configs = GameGui.getConfigsFromType(this.gameType);
             for (Identifier configuredGame : configs) {
                 openConfiguredGameBuilder.add(OpenConfiguredGameEntry
                         .ofItem(GameGui.getGameInfos(this.gameType).getIcon())
-                        .withGameType(this.gameType)
                         .withGameConfig(configuredGame));
             }
         }));

@@ -2,6 +2,8 @@ package fr.catcore.gamegui.builder;
 
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import fr.catcore.gamegui.GameGui;
+import fr.catcore.server.translations.api.LocalizableText;
+import fr.catcore.server.translations.api.LocalizationTarget;
 import net.minecraft.network.MessageType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
@@ -27,12 +29,11 @@ import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 
 public class OpenConfiguredGameEntry {
-    private final ItemStackBuilder icon;
-    private Identifier gameType;
+    private final ItemStack icon;
     private Identifier gameConfig;
 
     private OpenConfiguredGameEntry(ItemStack icon) {
-        this.icon = ItemStackBuilder.of(icon);
+        this.icon = icon;
     }
 
     public static OpenConfiguredGameEntry ofItem(ItemStack icon) {
@@ -48,16 +49,13 @@ public class OpenConfiguredGameEntry {
         return this;
     }
 
-    public OpenConfiguredGameEntry withGameType(Identifier gameType) {
-        this.gameType = gameType;
-        return this;
-    }
-
     public ItemStack createIcon(ServerPlayerEntity player) {
-        ItemStack icon = this.icon.build().copy();
-        Style style = Style.EMPTY.withItalic(false).withColor(Formatting.BLUE);
-        icon.setCustomName(new LiteralText(gameConfig.toString()));
-        return icon;
+        ItemStackBuilder builder = ItemStackBuilder.of(this.icon);
+        builder.setName(LocalizableText.asLocalizedFor(GameGui.getGameConfigName(this.gameConfig), (LocalizationTarget) player));
+        for (Text text : GameGui.getGameConfigDescription(this.gameConfig)) {
+            builder.addLore(LocalizableText.asLocalizedFor(text, (LocalizationTarget) player));
+        }
+        return builder.build().copy();
     }
 
     public void onClick(ServerPlayerEntity player) {
@@ -84,11 +82,11 @@ public class OpenConfiguredGameEntry {
     }
 
     private static void onOpenSuccess(ServerPlayerEntity playerEntity, Identifier gameId, PlayerManager playerManager) {
-        String command = "/game join";
+        String command = "/game join " + gameId;
         ClickEvent joinClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
         HoverEvent joinHover = new HoverEvent(net.minecraft.text.HoverEvent.Action.SHOW_TEXT, new LiteralText(command));
         Style joinStyle = Style.EMPTY.withFormatting(Formatting.UNDERLINE).withColor(Formatting.BLUE).withClickEvent(joinClick).withHoverEvent(joinHover);
-        Text openMessage = playerEntity.getDisplayName().shallowCopy().append(" has opened " + gameId + "! ").append((new LiteralText("Click here to join")).setStyle(joinStyle));
+        Text openMessage = new TranslatableText("text.plasmid.game.open.opened", playerEntity.getDisplayName(), gameId).append(new TranslatableText("text.plasmid.game.open.join").setStyle(joinStyle));
         playerManager.broadcastChatMessage(openMessage, MessageType.SYSTEM, Util.NIL_UUID);
     }
 
@@ -98,7 +96,7 @@ public class OpenConfiguredGameEntry {
         if (throwable instanceof GameOpenException) {
             message = ((GameOpenException)throwable).getReason().shallowCopy();
         } else {
-            message = new LiteralText("The game threw an unexpected error while starting!");
+            message = new TranslatableText("text.plasmid.game.open.error");
         }
 
         playerManager.broadcastChatMessage(((MutableText)message).formatted(Formatting.RED), MessageType.SYSTEM, Util.NIL_UUID);

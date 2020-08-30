@@ -3,7 +3,12 @@ package fr.catcore.gamegui;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.Reflection;
 import fr.catcore.gamegui.util.GameInfos;
+import fr.catcore.server.translations.api.resource.language.ServerLanguageManager;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import xyz.nucleoid.plasmid.game.ConfiguredGame;
@@ -28,38 +33,72 @@ public class GameGui implements ModInitializer {
 
     static {
         Map<String, GameInfos> map = new HashMap<>();
-        map.put("spleef:spleef", new GameInfos("Spleef", Items.IRON_SHOVEL));
-        map.put("bedwars:bed_wars", new GameInfos("Bed Wars", Items.RED_BED));
-        map.put("survivalgames:survivalgames", new GameInfos("Survival Games", Items.IRON_SWORD));
-        map.put("deacoudre:deacoudre", new GameInfos("Dé à Coudre", Items.WATER_BUCKET));
-        map.put("loopdeloop:loopdeloop", new GameInfos("Loop-de-Loop", Items.ELYTRA));
-        map.put("farmy_feud:farmy_feud", new GameInfos("Farmy Feud", Items.WHITE_WOOL));
-        map.put("colorswap:color_swap", new GameInfos("Color Swap", Items.JUKEBOX));
-        map.put("electricfloor:electric_floor", new GameInfos("Electric Floor", Items.WHITE_STAINED_GLASS));
-        map.put("ascension:ascension", new GameInfos("Ascension", Items.RABBIT_FOOT));
-        map.put("withersweeper:withersweeper", new GameInfos("Withersweeper", Items.SOUL_SOIL));
-        map.put("shardthief:shard_thief", new GameInfos("Shard Thief", Items.PRISMARINE_SHARD));
-        map.put("murder_mystery:murder_mystery", new GameInfos("Murder Mystery", Items.NETHERITE_SWORD));
-        map.put("wavedefense:wavedefense", new GameInfos("Wave Defense", Items.ZOMBIE_HEAD));
-        map.put("koth:koth", new GameInfos("King of the Hill", Items.LADDER));
-        map.put("clutchbridge:clutch_bridge", new GameInfos("Cluth Bridge", Items.MAGENTA_GLAZED_TERRACOTTA));
-        map.put("territorybattle:territory_battle", new GameInfos("Territory Battle", Items.GREEN_WOOL));
-        map.put("castlewars:castlewars", new GameInfos("Castle Wars", Items.VILLAGER_SPAWN_EGG));
-        map.put("capturetheflag:capturetheflag", new GameInfos("Capture the Flag", Items.BLUE_BANNER));
+        map.put("spleef:spleef", new GameInfos(Items.IRON_SHOVEL));
+        map.put("bedwars:bed_wars", new GameInfos(Items.RED_BED));
+        map.put("survivalgames:survivalgames", new GameInfos(Items.IRON_SWORD));
+        map.put("deacoudre:deacoudre", new GameInfos(Items.WATER_BUCKET));
+        map.put("loopdeloop:loopdeloop", new GameInfos(Items.ELYTRA));
+        map.put("farmy_feud:farmy_feud", new GameInfos(Items.WHITE_WOOL));
+        map.put("colorswap:color_swap", new GameInfos(Items.JUKEBOX));
+        map.put("electricfloor:electric_floor", new GameInfos(Items.WHITE_STAINED_GLASS));
+        map.put("ascension:ascension", new GameInfos(Items.RABBIT_FOOT));
+        map.put("withersweeper:withersweeper", new GameInfos(Items.SOUL_SOIL));
+        map.put("shardthief:shard_thief", new GameInfos(Items.PRISMARINE_SHARD));
+        map.put("murder_mystery:murder_mystery", new GameInfos(Items.NETHERITE_SWORD));
+        map.put("wavedefense:wavedefense", new GameInfos(Items.ZOMBIE_HEAD));
+        map.put("koth:koth", new GameInfos(Items.LADDER));
+        map.put("clutchbridge:clutch_bridge", new GameInfos(Items.MAGENTA_GLAZED_TERRACOTTA));
+        map.put("territorybattle:territory_battle", new GameInfos(Items.GREEN_WOOL));
+        map.put("castlewars:castlewars", new GameInfos(Items.VILLAGER_SPAWN_EGG));
+        map.put("capturetheflag:capturetheflag", new GameInfos(Items.BLUE_BANNER));
 
         gameTypeInfos = new ImmutableMap.Builder<String, GameInfos>().putAll(map).build();
     }
 
     public static GameInfos getGameInfos(String id) {
-        return gameTypeInfos.getOrDefault(id, new GameInfos(id, Items.BARRIER));
+        return gameTypeInfos.getOrDefault(id, new GameInfos(Items.BARRIER));
+    }
+
+    public static Text getGameTypeName(Identifier gameTypeID) {
+        if (ServerLanguageManager.INSTANCE.getLanguage("en_us")
+                .hasTranslation(String.format("text.game_gui.game_type.%s.%s.title", gameTypeID.getNamespace(), gameTypeID.getPath()))) {
+            return new TranslatableText(String.format("text.game_gui.game_type.%s.%s.title", gameTypeID.getNamespace(), gameTypeID.getPath()));
+        }
+        return new LiteralText(gameTypeID.toString());
+    }
+
+    public static Text[] getGameTypeDescription(Identifier gameTypeID) {
+        List<Text> lines = new ArrayList<>();
+        for (int i = 0; i <= 10; i++) {
+            if (ServerLanguageManager.INSTANCE.getLanguage("en_us")
+                    .hasTranslation(String.format("text.game_gui.game_type.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i))) {
+                lines.add(new TranslatableText(String.format("text.game_gui.game_type.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i)).formatted(Formatting.ITALIC, Formatting.DARK_PURPLE));
+            }
+        }
+        return lines.toArray(new Text[0]);
+    }
+
+    public static Text getGameConfigName(Identifier gameTypeID) {
+        if (ServerLanguageManager.INSTANCE.getLanguage("en_us")
+                .hasTranslation(String.format("text.game_gui.game_config.%s.%s.title", gameTypeID.getNamespace(), gameTypeID.getPath()))) {
+            return new TranslatableText(String.format("text.game_gui.game_config.%s.%s.title", gameTypeID.getNamespace(), gameTypeID.getPath()));
+        }
+        return new LiteralText(gameTypeID.toString());
+    }
+
+    public static Text[] getGameConfigDescription(Identifier gameTypeID) {
+        List<Text> lines = new ArrayList<>();
+        for (int i = 0; i <= 10; i++) {
+            if (ServerLanguageManager.INSTANCE.getLanguage("en_us")
+                    .hasTranslation(String.format("text.game_gui.game_config.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i))) {
+                lines.add(new TranslatableText(String.format("text.game_gui.game_config.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i)).formatted(Formatting.ITALIC, Formatting.DARK_PURPLE));
+            }
+        }
+        return lines.toArray(new Text[0]);
     }
 
     public static GameInfos getGameInfos(Identifier identifier) {
         return getGameInfos(identifier.toString());
-    }
-
-    public static Set<Map.Entry<String, GameInfos>> gameInfos() {
-        return gameTypeInfos.entrySet();
     }
 
     public static Identifier[] getConfigsFromType(Identifier identifier) {
