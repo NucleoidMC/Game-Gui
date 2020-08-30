@@ -61,8 +61,8 @@ public class GameGui implements ModInitializer {
 
     public static Text getGameTypeName(Identifier gameTypeID) {
         if (ServerLanguageManager.INSTANCE.getLanguage("en_us")
-                .hasTranslation(String.format("text.game_gui.game_type.%s.%s.title", gameTypeID.getNamespace(), gameTypeID.getPath()))) {
-            return new TranslatableText(String.format("text.game_gui.game_type.%s.%s.title", gameTypeID.getNamespace(), gameTypeID.getPath()));
+                .hasTranslation(String.format("gameType.%s.%s", gameTypeID.getNamespace(), gameTypeID.getPath()))) {
+            return new TranslatableText(String.format("gameType.%s.%s", gameTypeID.getNamespace(), gameTypeID.getPath()));
         }
         return new LiteralText(gameTypeID.toString());
     }
@@ -71,8 +71,8 @@ public class GameGui implements ModInitializer {
         List<Text> lines = new ArrayList<>();
         for (int i = 0; i <= 10; i++) {
             if (ServerLanguageManager.INSTANCE.getLanguage("en_us")
-                    .hasTranslation(String.format("text.game_gui.game_type.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i))) {
-                lines.add(new TranslatableText(String.format("text.game_gui.game_type.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i)).formatted(Formatting.ITALIC, Formatting.DARK_PURPLE));
+                    .hasTranslation(String.format("gameType.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i))) {
+                lines.add(new TranslatableText(String.format("gameType.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i)).formatted(Formatting.ITALIC, Formatting.DARK_PURPLE));
             }
         }
         return lines.toArray(new Text[0]);
@@ -80,8 +80,8 @@ public class GameGui implements ModInitializer {
 
     public static Text getGameConfigName(Identifier gameTypeID) {
         if (ServerLanguageManager.INSTANCE.getLanguage("en_us")
-                .hasTranslation(String.format("text.game_gui.game_config.%s.%s.title", gameTypeID.getNamespace(), gameTypeID.getPath()))) {
-            return new TranslatableText(String.format("text.game_gui.game_config.%s.%s.title", gameTypeID.getNamespace(), gameTypeID.getPath()));
+                .hasTranslation(String.format("gameConfig.%s.%s", gameTypeID.getNamespace(), gameTypeID.getPath()))) {
+            return new TranslatableText(String.format("gameConfig.%s.%s", gameTypeID.getNamespace(), gameTypeID.getPath()));
         }
         return new LiteralText(gameTypeID.toString());
     }
@@ -90,8 +90,8 @@ public class GameGui implements ModInitializer {
         List<Text> lines = new ArrayList<>();
         for (int i = 0; i <= 10; i++) {
             if (ServerLanguageManager.INSTANCE.getLanguage("en_us")
-                    .hasTranslation(String.format("text.game_gui.game_config.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i))) {
-                lines.add(new TranslatableText(String.format("text.game_gui.game_config.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i)).formatted(Formatting.ITALIC, Formatting.DARK_PURPLE));
+                    .hasTranslation(String.format("gameConfig.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i))) {
+                lines.add(new TranslatableText(String.format("gameConfig.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i)).formatted(Formatting.ITALIC, Formatting.DARK_PURPLE));
             }
         }
         return lines.toArray(new Text[0]);
