@@ -1,32 +1,25 @@
 package fr.catcore.gamegui.builder;
 
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import fr.catcore.gamegui.GameGui;
 import fr.catcore.server.translations.api.LocalizableText;
 import fr.catcore.server.translations.api.LocalizationTarget;
 import net.minecraft.network.MessageType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
-import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.*;
 import net.minecraft.util.Util;
 import xyz.nucleoid.plasmid.Plasmid;
 import xyz.nucleoid.plasmid.game.ConfiguredGame;
 import xyz.nucleoid.plasmid.game.GameOpenException;
-import xyz.nucleoid.plasmid.game.GameWorld;
+import xyz.nucleoid.plasmid.game.GameSpace;
+import xyz.nucleoid.plasmid.game.ManagedGameSpace;
 import xyz.nucleoid.plasmid.game.config.GameConfigs;
-import xyz.nucleoid.plasmid.game.player.JoinResult;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.concurrent.CompletableFuture;
 
 public class OpenConfiguredGameEntry {
     private final ItemStack icon;
@@ -102,11 +95,12 @@ public class OpenConfiguredGameEntry {
         playerManager.broadcastChatMessage(((MutableText)message).formatted(Formatting.RED), MessageType.SYSTEM, Util.NIL_UUID);
     }
 
-    private static void joinGame(GameWorld gameWorld, ServerPlayerEntity playerEntity) {
-        if (gameWorld == null) {
+    private static void joinGame(GameSpace gameWorld, ServerPlayerEntity playerEntity) {
+        ManagedGameSpace managedGameSpace = ManagedGameSpace.forWorld(gameWorld.getWorld());
+        if (managedGameSpace == null) {
             playerEntity.closeHandledScreen();
         } else {
-            gameWorld.offerPlayer(playerEntity).thenAccept((joinResult) -> {
+            managedGameSpace.offerPlayer(playerEntity).thenAccept((joinResult) -> {
                 if (joinResult.isError()) {
                     Text error = joinResult.getError();
                     playerEntity.sendMessage(error.shallowCopy().formatted(Formatting.RED), MessageType.CHAT, Util.NIL_UUID);

@@ -19,7 +19,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import xyz.nucleoid.plasmid.fake.FakeItem;
 import xyz.nucleoid.plasmid.game.ConfiguredGame;
-import xyz.nucleoid.plasmid.game.GameWorld;
+import xyz.nucleoid.plasmid.game.ManagedGameSpace;
 import xyz.nucleoid.plasmid.game.config.GameConfigs;
 
 public final class JoinGameItem extends Item implements FakeItem {
@@ -47,9 +47,9 @@ public final class JoinGameItem extends Item implements FakeItem {
     public static void openJoinScreen(PlayerEntity playerEntity) {
         playerEntity.openHandledScreen(JoinGameUi.create(LocalizableText.asLocalizedFor(new TranslatableText("text.game_gui.gui.join"), (LocalizationTarget) playerEntity), joinGameBuilder -> {
             for (ServerWorld serverWorld : playerEntity.getServer().getWorlds()) {
-                GameWorld gameWorld = GameWorld.forWorld(serverWorld);
+                ManagedGameSpace gameWorld = ManagedGameSpace.forWorld(serverWorld);
                 if (gameWorld == null) continue;
-                ConfiguredGame<?> configuredGame = gameWorld.getGame();
+                ConfiguredGame<?> configuredGame = gameWorld.getGameConfig();
                 Identifier gameID = new Identifier("game-gui", "null");
                 for (Identifier id : GameConfigs.getKeys()) {
                     if (GameConfigs.get(id) == configuredGame) {

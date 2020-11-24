@@ -23,6 +23,6 @@
     "fabricloader": ">=0.9.1+build.205",
     "fabric": "*",
     "minecraft": ">=1.16.1",
-    "plasmid": ">=0.2.0"
+    "plasmid": ">=0.4.0"
   }
 }
