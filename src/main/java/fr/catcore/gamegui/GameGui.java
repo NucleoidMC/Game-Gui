@@ -83,7 +83,9 @@ public class GameGui implements ModInitializer {
                 .hasTranslation(String.format("gameConfig.%s.%s", gameTypeID.getNamespace(), gameTypeID.getPath()))) {
             return new TranslatableText(String.format("gameConfig.%s.%s", gameTypeID.getNamespace(), gameTypeID.getPath()));
         }
-        return new LiteralText(gameTypeID.toString());
+        ConfiguredGame<?> configuredGame = GameConfigs.get(gameTypeID);
+        if (configuredGame == null) return new LiteralText(gameTypeID.toString());
+        return new LiteralText(configuredGame.getName());
     }
 
     public static Text[] getGameConfigDescription(Identifier gameTypeID) {
