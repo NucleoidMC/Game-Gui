@@ -39,6 +39,11 @@ public final class OpenGameItem extends Item implements FakeItem {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity playerEntity, Hand hand) {
         if (!Utils.hasOpenPermission((ServerPlayerEntity) playerEntity)) return TypedActionResult.fail(playerEntity.getStackInHand(hand));
+        openOpenScreen(playerEntity);
+        return TypedActionResult.success(playerEntity.getStackInHand(hand));
+    }
+
+    public static void openOpenScreen(PlayerEntity playerEntity) {
         playerEntity.openHandledScreen(OpenGameTypeUi.create(LocalizableText.asLocalizedFor(new TranslatableText("text.game_gui.gui.open"),
                 (LocalizationTarget) playerEntity), openGameTypeBuilder -> {
             for (Identifier gameType : GameType.REGISTRY.keySet()) {
@@ -46,7 +51,6 @@ public final class OpenGameItem extends Item implements FakeItem {
                 openGameTypeBuilder.add(OpenGameTypeEntry.ofItem(GameGui.getGameInfos(gameType).getIcon()).withGameType(gameType));
             }
         }));
-        return TypedActionResult.success(playerEntity.getStackInHand(hand));
     }
 
     @Override

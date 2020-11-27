@@ -2,9 +2,11 @@ package fr.catcore.gamegui;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.Reflection;
+import fr.catcore.gamegui.command.GameGuiCommand;
 import fr.catcore.gamegui.util.GameInfos;
 import fr.catcore.server.translations.api.resource.language.ServerLanguageManager;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -29,6 +31,9 @@ public class GameGui implements ModInitializer {
     public void onInitialize() {
         Reflection.initialize(GameGuiCustomItems.class);
 
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
+            GameGuiCommand.register(dispatcher);
+        });
     }
 
     static {
