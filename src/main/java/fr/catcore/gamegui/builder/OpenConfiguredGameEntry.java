@@ -1,12 +1,15 @@
 package fr.catcore.gamegui.builder;
 
 import fr.catcore.gamegui.GameGui;
-import fr.catcore.server.translations.api.LocalizableText;
-import fr.catcore.server.translations.api.LocalizationTarget;
+import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.MessageType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import xyz.nucleoid.plasmid.Plasmid;
 import xyz.nucleoid.plasmid.game.ConfiguredGame;
@@ -15,11 +18,6 @@ import xyz.nucleoid.plasmid.game.GameSpace;
 import xyz.nucleoid.plasmid.game.ManagedGameSpace;
 import xyz.nucleoid.plasmid.game.config.GameConfigs;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 
 public class OpenConfiguredGameEntry {
     private final ItemStack icon;
@@ -44,9 +42,9 @@ public class OpenConfiguredGameEntry {
 
     public ItemStack createIcon(ServerPlayerEntity player) {
         ItemStackBuilder builder = ItemStackBuilder.of(this.icon);
-        builder.setName(LocalizableText.asLocalizedFor(GameGui.getGameConfigName(this.gameConfig), (LocalizationTarget) player));
+        builder.setName(GameGui.getGameConfigName(this.gameConfig));
         for (Text text : GameGui.getGameConfigDescription(this.gameConfig)) {
-            builder.addLore(LocalizableText.asLocalizedFor(text, (LocalizationTarget) player));
+            builder.addLore(text);
         }
         return builder.build().copy();
     }

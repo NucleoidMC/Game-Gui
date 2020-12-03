@@ -2,19 +2,13 @@ package fr.catcore.gamegui.builder;
 
 import fr.catcore.gamegui.GameGui;
 import fr.catcore.gamegui.ui.OpenConfiguredGameUi;
-import fr.catcore.server.translations.api.LocalizableText;
-import fr.catcore.server.translations.api.LocalizationTarget;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Style;
-import net.minecraft.util.Formatting;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
+import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 
 public class OpenGameTypeEntry {
     private final ItemStack icon;
@@ -39,15 +33,15 @@ public class OpenGameTypeEntry {
 
     public ItemStack createIcon(ServerPlayerEntity player) {
         ItemStackBuilder builder = ItemStackBuilder.of(this.icon);
-        builder.setName(LocalizableText.asLocalizedFor(GameGui.getGameTypeName(this.gameType), (LocalizationTarget) player));
+        builder.setName(GameGui.getGameTypeName(this.gameType));
         for (Text text : GameGui.getGameTypeDescription(this.gameType)) {
-            builder.addLore(LocalizableText.asLocalizedFor(text, (LocalizationTarget) player));
+            builder.addLore(text);
         }
         return builder.build().copy();
     }
 
     public void onClick(ServerPlayerEntity player) {
-        player.openHandledScreen(OpenConfiguredGameUi.create(LocalizableText.asLocalizedFor(new TranslatableText("text.game_gui.gui.open"), (LocalizationTarget) player),
+        player.openHandledScreen(OpenConfiguredGameUi.create(new TranslatableText("text.game_gui.gui.open"),
                 openConfiguredGameBuilder -> {
             Identifier[] configs = GameGui.getConfigsFromType(this.gameType);
             for (Identifier configuredGame : configs) {

@@ -2,8 +2,6 @@ package fr.catcore.gamegui.builder;
 
 import fr.catcore.gamegui.GameGui;
 import fr.catcore.gamegui.item.JoinGameItem;
-import fr.catcore.server.translations.api.LocalizableText;
-import fr.catcore.server.translations.api.LocalizationTarget;
 import net.minecraft.text.TranslatableText;
 import xyz.nucleoid.plasmid.game.ConfiguredGame;
 import xyz.nucleoid.plasmid.game.GameType;
@@ -55,8 +53,8 @@ public class JoinGameEntry {
         ConfiguredGame<?> configuredGame = GameConfigs.get(this.gameConfigId);
         GameType<?> gameType = configuredGame.getType();
         ItemStackBuilder iconBuilder = ItemStackBuilder.of(this.icon);
-        iconBuilder.addLore(LocalizableText.asLocalizedFor(new TranslatableText("text.game_gui.join.config", GameGui.getGameConfigName(this.gameConfigId)), (LocalizationTarget) player));
-        iconBuilder.addLore(LocalizableText.asLocalizedFor(new TranslatableText("text.game_gui.join.type", GameGui.getGameTypeName(gameType.getIdentifier())), (LocalizationTarget) player));
+        iconBuilder.addLore(new TranslatableText("text.game_gui.join.config", GameGui.getGameConfigName(this.gameConfigId)));
+        iconBuilder.addLore(new TranslatableText("text.game_gui.join.type", GameGui.getGameTypeName(gameType.getIdentifier())));
 
         MinecraftServer minecraftServer = player.getServer();
         ServerWorld serverWorld = minecraftServer.getWorld(this.worldRegistryKey);
@@ -73,7 +71,7 @@ public class JoinGameEntry {
         try {
             playerCount = openWorld.getPlayerCount();
         } catch (NullPointerException e) {}
-        iconBuilder.addLore(LocalizableText.asLocalizedFor(new TranslatableText("text.game_gui.join.player_count", playerCount), (LocalizationTarget) player));
+        iconBuilder.addLore(new TranslatableText("text.game_gui.join.player_count", playerCount));
 
         ItemStack icon = iconBuilder.build().copy();
         icon.setCustomName(new LiteralText(this.worldRegistryKey.getValue().toString()));

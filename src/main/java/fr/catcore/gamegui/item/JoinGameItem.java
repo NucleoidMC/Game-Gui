@@ -3,14 +3,11 @@ package fr.catcore.gamegui.item;
 import fr.catcore.gamegui.GameGui;
 import fr.catcore.gamegui.builder.JoinGameEntry;
 import fr.catcore.gamegui.ui.JoinGameUi;
-import fr.catcore.server.translations.api.LocalizableText;
-import fr.catcore.server.translations.api.LocalizationTarget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
@@ -30,12 +27,12 @@ public final class JoinGameItem extends Item implements FakeItem {
 
     @Override
     public Text getName() {
-        return new LiteralText("Join Game");
+        return new TranslatableText("text.game_gui.gui.join");
     }
 
     @Override
     public Text getName(ItemStack stack) {
-        return new LiteralText("Join Game");
+        return new TranslatableText("text.game_gui.gui.join");
     }
 
     @Override
@@ -45,7 +42,7 @@ public final class JoinGameItem extends Item implements FakeItem {
     }
 
     public static void openJoinScreen(PlayerEntity playerEntity) {
-        playerEntity.openHandledScreen(JoinGameUi.create(LocalizableText.asLocalizedFor(new TranslatableText("text.game_gui.gui.join"), (LocalizationTarget) playerEntity), joinGameBuilder -> {
+        playerEntity.openHandledScreen(JoinGameUi.create(new TranslatableText("text.game_gui.gui.join"), joinGameBuilder -> {
             for (ServerWorld serverWorld : playerEntity.getServer().getWorlds()) {
                 ManagedGameSpace gameWorld = ManagedGameSpace.forWorld(serverWorld);
                 if (gameWorld == null) continue;
