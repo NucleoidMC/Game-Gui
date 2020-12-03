@@ -4,22 +4,24 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.Reflection;
 import fr.catcore.gamegui.command.GameGuiCommand;
 import fr.catcore.gamegui.util.GameInfos;
-import fr.catcore.server.translations.api.resource.language.ServerLanguageManager;
+import fr.catcore.server.translations.api.ServerTranslations;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import xyz.nucleoid.plasmid.game.ConfiguredGame;
 import xyz.nucleoid.plasmid.game.config.GameConfigs;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GameGui implements ModInitializer {
 
@@ -65,8 +67,8 @@ public class GameGui implements ModInitializer {
     }
 
     public static Text getGameTypeName(Identifier gameTypeID) {
-        if (ServerLanguageManager.INSTANCE.getLanguage("en_us")
-                .hasTranslation(String.format("gameType.%s.%s", gameTypeID.getNamespace(), gameTypeID.getPath()))) {
+        if (ServerTranslations.INSTANCE.getLanguage("en_us")
+                .remote.contains(String.format("gameType.%s.%s", gameTypeID.getNamespace(), gameTypeID.getPath()))) {
             return new TranslatableText(String.format("gameType.%s.%s", gameTypeID.getNamespace(), gameTypeID.getPath()));
         }
         return new LiteralText(gameTypeID.toString());
@@ -75,8 +77,8 @@ public class GameGui implements ModInitializer {
     public static Text[] getGameTypeDescription(Identifier gameTypeID) {
         List<Text> lines = new ArrayList<>();
         for (int i = 0; i <= 10; i++) {
-            if (ServerLanguageManager.INSTANCE.getLanguage("en_us")
-                    .hasTranslation(String.format("gameType.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i))) {
+            if (ServerTranslations.INSTANCE.getLanguage("en_us")
+                    .remote.contains(String.format("gameType.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i))) {
                 lines.add(new TranslatableText(String.format("gameType.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i)).formatted(Formatting.ITALIC, Formatting.DARK_PURPLE));
             }
         }
@@ -84,8 +86,8 @@ public class GameGui implements ModInitializer {
     }
 
     public static Text getGameConfigName(Identifier gameTypeID) {
-        if (ServerLanguageManager.INSTANCE.getLanguage("en_us")
-                .hasTranslation(String.format("gameConfig.%s.%s", gameTypeID.getNamespace(), gameTypeID.getPath()))) {
+        if (ServerTranslations.INSTANCE.getLanguage("en_us")
+                .remote.contains(String.format("gameConfig.%s.%s", gameTypeID.getNamespace(), gameTypeID.getPath()))) {
             return new TranslatableText(String.format("gameConfig.%s.%s", gameTypeID.getNamespace(), gameTypeID.getPath()));
         }
         ConfiguredGame<?> configuredGame = GameConfigs.get(gameTypeID);
@@ -96,8 +98,8 @@ public class GameGui implements ModInitializer {
     public static Text[] getGameConfigDescription(Identifier gameTypeID) {
         List<Text> lines = new ArrayList<>();
         for (int i = 0; i <= 10; i++) {
-            if (ServerLanguageManager.INSTANCE.getLanguage("en_us")
-                    .hasTranslation(String.format("gameConfig.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i))) {
+            if (ServerTranslations.INSTANCE.getLanguage("en_us")
+                    .remote.contains(String.format("gameConfig.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i))) {
                 lines.add(new TranslatableText(String.format("gameConfig.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i)).formatted(Formatting.ITALIC, Formatting.DARK_PURPLE));
             }
         }
@@ -111,7 +113,7 @@ public class GameGui implements ModInitializer {
     public static Identifier[] getConfigsFromType(Identifier identifier) {
         List<Identifier> configs = new ArrayList<>();
         for (Identifier configuredGameID : GameConfigs.getKeys()) {
-            ConfiguredGame configuredGame = GameConfigs.get(configuredGameID);
+            ConfiguredGame<?> configuredGame = GameConfigs.get(configuredGameID);
             if (configuredGame.getType().getIdentifier() == identifier) configs.add(configuredGameID);
         }
         return configs.toArray(new Identifier[0]);
