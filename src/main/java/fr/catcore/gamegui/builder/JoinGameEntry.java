@@ -62,7 +62,7 @@ public class JoinGameEntry {
             return ItemStack.EMPTY;
         }
 
-        iconBuilder.addLore(new TranslatableText("text.game_gui.join.player_count", gameSpace.getPlayers()));
+        iconBuilder.addLore(new TranslatableText("text.game_gui.join.player_count", gameSpace.getPlayerCount()));
 
         return iconBuilder.build();
     }
