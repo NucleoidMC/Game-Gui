@@ -48,8 +48,8 @@ public class JoinGameEntry {
         ConfiguredGame<?> configuredGame = GameConfigs.get(this.gameConfigId);
         GameType<?> gameType = configuredGame.getType();
 
-        TranslatableText typeName = new TranslatableText("text.game_gui.join.type", GameGui.getGameTypeName(gameType.getIdentifier()));
-        TranslatableText configName = new TranslatableText("text.game_gui.join.config", GameGui.getGameConfigName(this.gameConfigId));
+        Text configName = GameGui.getGameConfigName(this.gameConfigId);
+        Text typeName = new TranslatableText("text.game_gui.join.type", GameGui.getGameTypeName(gameType.getIdentifier()));
 
         ItemStackBuilder iconBuilder = ItemStackBuilder.of(this.icon);
         iconBuilder.setName(configName);
