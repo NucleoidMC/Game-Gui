@@ -44,7 +44,7 @@ public final class OpenGameItem extends Item implements FakeItem {
         playerEntity.openHandledScreen(OpenGameTypeUi.create(new TranslatableText("text.game_gui.gui.open"), openGameTypeBuilder -> {
             for (Identifier gameType : GameType.REGISTRY.keySet()) {
                 if (gameType.toString().equals("plasmid:test")) continue;
-                openGameTypeBuilder.add(OpenGameTypeEntry.ofItem(GameGui.getGameInfos(gameType).getIcon()).withGameType(gameType));
+                openGameTypeBuilder.add(OpenGameTypeEntry.ofItem(GameGui.getGameInfos(gameType).get()).withGameType(gameType));
             }
         }));
     }

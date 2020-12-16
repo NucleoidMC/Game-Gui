@@ -46,7 +46,7 @@ public class OpenGameTypeEntry {
             Identifier[] configs = GameGui.getConfigsFromType(this.gameType);
             for (Identifier configuredGame : configs) {
                 openConfiguredGameBuilder.add(OpenConfiguredGameEntry
-                        .ofItem(GameGui.getGameInfos(this.gameType).getIcon())
+                        .ofItem(GameGui.getGameInfos(this.gameType).get())
                         .withGameConfig(configuredGame));
             }
         }));

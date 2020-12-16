@@ -1,12 +1,11 @@
 package fr.catcore.gamegui;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.Reflection;
 import fr.catcore.gamegui.command.GameGuiCommand;
-import fr.catcore.gamegui.util.GameInfos;
 import fr.catcore.server.translations.api.ServerTranslations;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
@@ -22,10 +21,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class GameGui implements ModInitializer {
 
-    private static final Map<String, GameInfos> gameTypeInfos;
+    private static final Map<String, Supplier<ItemStack>> gameTypeInfos = new HashMap<>();
 
     public static final Logger LOGGER = LogManager.getLogger();
 
@@ -39,31 +39,40 @@ public class GameGui implements ModInitializer {
     }
 
     static {
-        Map<String, GameInfos> map = new HashMap<>();
-        map.put("spleef:spleef", new GameInfos(Items.IRON_SHOVEL));
-        map.put("bedwars:bed_wars", new GameInfos(Items.RED_BED));
-        map.put("survivalgames:survivalgames", new GameInfos(Items.IRON_SWORD));
-        map.put("deacoudre:deacoudre", new GameInfos(Items.WATER_BUCKET));
-        map.put("loopdeloop:loopdeloop", new GameInfos(Items.ELYTRA));
-        map.put("farmy_feud:farmy_feud", new GameInfos(Items.WHITE_WOOL));
-        map.put("colorswap:color_swap", new GameInfos(Items.JUKEBOX));
-        map.put("electricfloor:electric_floor", new GameInfos(Items.WHITE_STAINED_GLASS));
-        map.put("ascension:ascension", new GameInfos(Items.RABBIT_FOOT));
-        map.put("withersweeper:withersweeper", new GameInfos(Items.SOUL_SOIL));
-        map.put("shardthief:shard_thief", new GameInfos(Items.PRISMARINE_SHARD));
-        map.put("murder_mystery:murder_mystery", new GameInfos(Items.NETHERITE_SWORD));
-        map.put("wavedefense:wavedefense", new GameInfos(Items.ZOMBIE_HEAD));
-        map.put("koth:koth", new GameInfos(Items.LADDER));
-        map.put("clutchbridge:clutch_bridge", new GameInfos(Items.MAGENTA_GLAZED_TERRACOTTA));
-        map.put("territorybattle:territory_battle", new GameInfos(Items.GREEN_WOOL));
-        map.put("castlewars:castlewars", new GameInfos(Items.VILLAGER_SPAWN_EGG));
-        map.put("capturetheflag:capturetheflag", new GameInfos(Items.BLUE_BANNER));
-
-        gameTypeInfos = new ImmutableMap.Builder<String, GameInfos>().putAll(map).build();
+        registerGameTypeIcon("spleef:spleef", () -> new ItemStack(Items.IRON_SHOVEL));
+        registerGameTypeIcon("bedwars:bed_wars", () -> new ItemStack(Items.RED_BED));
+        registerGameTypeIcon("survivalgames:survivalgames", () -> new ItemStack(Items.IRON_SWORD));
+        registerGameTypeIcon("deacoudre:deacoudre", () -> new ItemStack(Items.WATER_BUCKET));
+        registerGameTypeIcon("loopdeloop:loopdeloop", () -> new ItemStack(Items.ELYTRA));
+        registerGameTypeIcon("farmy_feud:farmy_feud", () -> new ItemStack(Items.WHITE_WOOL));
+        registerGameTypeIcon("colorswap:color_swap", () -> new ItemStack(Items.JUKEBOX));
+        registerGameTypeIcon("electricfloor:electric_floor", () -> new ItemStack(Items.WHITE_STAINED_GLASS));
+        registerGameTypeIcon("ascension:ascension", () -> new ItemStack(Items.RABBIT_FOOT));
+        registerGameTypeIcon("withersweeper:withersweeper", () -> new ItemStack(Items.SOUL_SOIL));
+        registerGameTypeIcon("shardthief:shard_thief", () -> new ItemStack(Items.PRISMARINE_SHARD));
+        registerGameTypeIcon("murder_mystery:murder_mystery", () -> new ItemStack(Items.NETHERITE_SWORD));
+        registerGameTypeIcon("wavedefense:wavedefense", () -> new ItemStack(Items.ZOMBIE_HEAD));
+        registerGameTypeIcon("koth:koth", () -> new ItemStack(Items.LADDER));
+        registerGameTypeIcon("clutchbridge:clutch_bridge", () -> new ItemStack(Items.MAGENTA_GLAZED_TERRACOTTA));
+        registerGameTypeIcon("territorybattle:territory_battle", () -> new ItemStack(Items.GREEN_WOOL));
+        registerGameTypeIcon("castlewars:castlewars", () -> new ItemStack(Items.VILLAGER_SPAWN_EGG));
+        registerGameTypeIcon("capturetheflag:capturetheflag", () -> new ItemStack(Items.BLUE_BANNER));
     }
 
-    public static GameInfos getGameInfos(String id) {
-        return gameTypeInfos.getOrDefault(id, new GameInfos(Items.BARRIER));
+    public static void registerGameTypeIcon(Identifier gameTypeId, Supplier<ItemStack> icon) {
+        registerGameTypeIcon(gameTypeId.toString(), icon);
+    }
+
+    public static void registerGameTypeIcon(String gameTypeId, Supplier<ItemStack> icon) {
+        if (gameTypeInfos.containsKey(gameTypeId)) {
+            LOGGER.warn("Tried to register two icons for game type " + gameTypeId + ", Current:" + gameTypeInfos.get(gameTypeId).get().toString() + "; New:" + icon.get().toString());
+        } else {
+            gameTypeInfos.put(gameTypeId, icon);
+        }
+    }
+
+    public static Supplier<ItemStack> getGameInfos(String id) {
+        return gameTypeInfos.getOrDefault(id, () -> new ItemStack(Items.BARRIER));
     }
 
     public static Text getGameTypeName(Identifier gameTypeID) {
@@ -106,7 +115,7 @@ public class GameGui implements ModInitializer {
         return lines.toArray(new Text[0]);
     }
 
-    public static GameInfos getGameInfos(Identifier identifier) {
+    public static Supplier<ItemStack> getGameInfos(Identifier identifier) {
         return getGameInfos(identifier.toString());
     }
 
