@@ -1,6 +1,7 @@
 package fr.catcore.gamegui.item;
 
 import fr.catcore.gamegui.GameGui;
+import fr.catcore.gamegui.builder.GuiEntry;
 import fr.catcore.gamegui.builder.JoinGameEntry;
 import fr.catcore.gamegui.ui.JoinGameUi;
 import net.minecraft.entity.player.PlayerEntity;
@@ -53,7 +54,7 @@ public final class JoinGameItem extends Item implements FakeItem {
                 }
 
                 joinGameBuilder.add(
-                        JoinGameEntry.ofItem(GameGui.getGameInfos(configuredGame.getType().getIdentifier()).get())
+                        GuiEntry.joinGameEntryOf(GameGui.getGameInfos(configuredGame.getType().getIdentifier()).get())
                                 .withGameSpace(gameSpace)
                                 .withGameConfig(gameID)
                 );

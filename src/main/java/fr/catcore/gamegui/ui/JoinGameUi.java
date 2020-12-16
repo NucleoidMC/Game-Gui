@@ -35,7 +35,7 @@ public class JoinGameUi implements NamedScreenHandlerFactory {
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
         final ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
         JoinGameInventory inventory = new JoinGameInventory(serverPlayer, this.builder);
-        return new GenericContainerScreenHandler(ScreenHandlerType.GENERIC_9X5, syncId, playerInventory, inventory, 5) {
+        return new GenericContainerScreenHandler(ScreenHandlerType.GENERIC_9X6, syncId, playerInventory, inventory, 5) {
             public ItemStack transferSlot(PlayerEntity player, int invSlot) {
                 this.resendInventory();
                 return ItemStack.EMPTY;

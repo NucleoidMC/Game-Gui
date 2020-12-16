@@ -17,21 +17,12 @@ import xyz.nucleoid.plasmid.game.ManagedGameSpace;
 import xyz.nucleoid.plasmid.game.config.GameConfigs;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 
-public class JoinGameEntry {
-    private final ItemStack icon;
+public class JoinGameEntry extends GuiEntry{
     private Identifier gameConfigId;
     private ManagedGameSpace gameSpace;
 
-    private JoinGameEntry(ItemStack icon) {
-        this.icon = icon;
-    }
-
-    public static JoinGameEntry ofItem(ItemStack icon) {
-        return new JoinGameEntry(icon);
-    }
-
-    public static JoinGameEntry ofItem(ItemConvertible icon) {
-        return new JoinGameEntry(new ItemStack(icon));
+    protected JoinGameEntry(ItemStack icon) {
+        super(icon);
     }
 
     public JoinGameEntry withGameConfig(Identifier gameConfigId) {
@@ -44,21 +35,25 @@ public class JoinGameEntry {
         return this;
     }
 
+    @Override
     public ItemStack createIcon(ServerPlayerEntity player) {
         ConfiguredGame<?> configuredGame = GameConfigs.get(this.gameConfigId);
+        if (configuredGame == null) return ItemStack.EMPTY;
         GameType<?> gameType = configuredGame.getType();
 
         Text configName = GameGui.getGameConfigName(this.gameConfigId);
         Text typeName = new TranslatableText("text.game_gui.join.type", GameGui.getGameTypeName(gameType.getIdentifier()));
 
-        ItemStackBuilder iconBuilder = ItemStackBuilder.of(this.icon);
+        ItemStackBuilder iconBuilder = ItemStackBuilder.of(this.getIcon());
         iconBuilder.setName(configName);
         iconBuilder.addLore(typeName);
 
         ManagedGameSpace gameSpace = this.gameSpace;
         if (gameSpace == null) {
-            player.closeHandledScreen();
-            JoinGameItem.openJoinScreen(player);
+            if (!(player.currentScreenHandler == null || player.currentScreenHandler == player.playerScreenHandler)) {
+                player.closeHandledScreen();
+                JoinGameItem.openJoinScreen(player);
+            }
             return ItemStack.EMPTY;
         }
 
