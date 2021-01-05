@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import fr.catcore.gamegui.GameGui;
 import fr.catcore.gamegui.builder.GuiEntry;
+import fr.catcore.gamegui.codec.CodecToStringParser;
 import fr.catcore.gamegui.codec.RecoderCoderBuilderRegistry;
 import fr.catcore.gamegui.mixin.codec.RecordCodecBuilderAccessor;
 import net.minecraft.item.ItemStack;
@@ -35,15 +36,16 @@ public class CreateGameTypeEntry extends GuiEntry {
     }
 
     public void onClick(ServerPlayerEntity player) {
-        System.out.println(((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().toString());
-        System.out.println(((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().getClass().toString());
+        CodecToStringParser.parse(((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().toString());
+//        System.out.println(((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().toString());
+//        System.out.println(((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().getClass().toString());
 //        RecordCodecBuilder recordCodecBuilder = (RecordCodecBuilder) (Object) ((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec();
 //        RecordCodecBuilderAccessor accessor = (RecordCodecBuilderAccessor) (Object) recordCodecBuilder;
 //        System.out.println(accessor.getDecoder().toString());
 //        System.out.println(accessor.getEncoder().toString());
 //        System.out.println(accessor.getGetter().toString());
-        System.out.println(RecoderCoderBuilderRegistry.getMapToBuilder().toString());
-        System.out.println(RecoderCoderBuilderRegistry.getRecordCodecBuilder(((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec()).toString());
+//        System.out.println(RecoderCoderBuilderRegistry.getMapToBuilder().toString());
+//        System.out.println(RecoderCoderBuilderRegistry.getRecordCodecBuilder(((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec()).toString());
 //        player.openHandledScreen(OpenConfiguredGameUi.create(new TranslatableText("text.game_gui.gui.open"),
 //                openConfiguredGameBuilder -> {
 //            Identifier[] configs = GameGui.getConfigsFromType(this.gameType);
