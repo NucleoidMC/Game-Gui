@@ -71,7 +71,7 @@ public class JoinGameInventory implements Inventory {
     }
 
     public int size() {
-        return 54;
+        return 62;
     }
 
     public boolean isEmpty() {

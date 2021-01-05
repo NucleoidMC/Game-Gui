@@ -71,7 +71,7 @@ public class OpenConfiguredGameInventory implements Inventory {
     }
 
     public int size() {
-        return 54;
+        return 64;
     }
 
     public boolean isEmpty() {
