@@ -10,20 +10,11 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 
-public class OpenGameTypeEntry {
-    private final ItemStack icon;
+public class OpenGameTypeEntry extends GuiEntry {
     private Identifier gameType;
 
-    private OpenGameTypeEntry(ItemStack icon) {
-        this.icon = icon;
-    }
-
-    public static OpenGameTypeEntry ofItem(ItemStack icon) {
-        return new OpenGameTypeEntry(icon);
-    }
-
-    public static OpenGameTypeEntry ofItem(ItemConvertible icon) {
-        return new OpenGameTypeEntry(new ItemStack(icon));
+    protected OpenGameTypeEntry(ItemStack icon) {
+        super(icon);
     }
 
     public OpenGameTypeEntry withGameType(Identifier gameType) {
@@ -32,7 +23,7 @@ public class OpenGameTypeEntry {
     }
 
     public ItemStack createIcon(ServerPlayerEntity player) {
-        ItemStackBuilder builder = ItemStackBuilder.of(this.icon);
+        ItemStackBuilder builder = ItemStackBuilder.of(this.getIcon());
         builder.setName(GameGui.getGameTypeName(this.gameType));
         for (Text text : GameGui.getGameTypeDescription(this.gameType)) {
             builder.addLore(text);
@@ -45,8 +36,8 @@ public class OpenGameTypeEntry {
                 openConfiguredGameBuilder -> {
             Identifier[] configs = GameGui.getConfigsFromType(this.gameType);
             for (Identifier configuredGame : configs) {
-                openConfiguredGameBuilder.add(OpenConfiguredGameEntry
-                        .ofItem(GameGui.getGameInfos(this.gameType).get())
+                openConfiguredGameBuilder.add(GuiEntry
+                        .openConfiguredGameEntryOf(GameGui.getGameInfos(this.gameType).get())
                         .withGameConfig(configuredGame));
             }
         }));

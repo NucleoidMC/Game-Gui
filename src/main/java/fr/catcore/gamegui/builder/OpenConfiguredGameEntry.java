@@ -19,20 +19,11 @@ import xyz.nucleoid.plasmid.game.ManagedGameSpace;
 import xyz.nucleoid.plasmid.game.config.GameConfigs;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 
-public class OpenConfiguredGameEntry {
-    private final ItemStack icon;
+public class OpenConfiguredGameEntry extends GuiEntry {
     private Identifier gameConfig;
 
-    private OpenConfiguredGameEntry(ItemStack icon) {
-        this.icon = icon;
-    }
-
-    public static OpenConfiguredGameEntry ofItem(ItemStack icon) {
-        return new OpenConfiguredGameEntry(icon);
-    }
-
-    public static OpenConfiguredGameEntry ofItem(ItemConvertible icon) {
-        return new OpenConfiguredGameEntry(new ItemStack(icon));
+    protected OpenConfiguredGameEntry(ItemStack icon) {
+        super(icon);
     }
 
     public OpenConfiguredGameEntry withGameConfig(Identifier gameConfig) {
@@ -41,7 +32,7 @@ public class OpenConfiguredGameEntry {
     }
 
     public ItemStack createIcon(ServerPlayerEntity player) {
-        ItemStackBuilder builder = ItemStackBuilder.of(this.icon);
+        ItemStackBuilder builder = ItemStackBuilder.of(this.getIcon());
         builder.setName(GameGui.getGameConfigName(this.gameConfig));
         for (Text text : GameGui.getGameConfigDescription(this.gameConfig)) {
             builder.addLore(text);

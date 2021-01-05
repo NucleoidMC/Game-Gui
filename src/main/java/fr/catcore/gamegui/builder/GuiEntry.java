@@ -19,6 +19,22 @@ public abstract class GuiEntry {
         return joinGameEntryOf(new ItemStack(icon));
     }
 
+    public static OpenConfiguredGameEntry openConfiguredGameEntryOf(ItemStack icon) {
+        return new OpenConfiguredGameEntry(icon);
+    }
+
+    public static OpenConfiguredGameEntry openConfiguredGameEntryOf(Item icon) {
+        return openConfiguredGameEntryOf(new ItemStack(icon));
+    }
+
+    public static OpenGameTypeEntry openGameTypeEntryOf(ItemStack icon) {
+        return new OpenGameTypeEntry(icon);
+    }
+
+    public static OpenGameTypeEntry openGameTypeEntryOf(Item icon) {
+        return openGameTypeEntryOf(new ItemStack(icon));
+    }
+
     public ItemStack getIcon() {
         return icon;
     }

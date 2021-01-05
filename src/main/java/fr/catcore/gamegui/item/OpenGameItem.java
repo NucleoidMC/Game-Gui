@@ -1,6 +1,7 @@
 package fr.catcore.gamegui.item;
 
 import fr.catcore.gamegui.GameGui;
+import fr.catcore.gamegui.builder.GuiEntry;
 import fr.catcore.gamegui.builder.OpenGameTypeEntry;
 import fr.catcore.gamegui.ui.OpenGameTypeUi;
 import fr.catcore.gamegui.util.Utils;
@@ -44,7 +45,7 @@ public final class OpenGameItem extends Item implements FakeItem {
         playerEntity.openHandledScreen(OpenGameTypeUi.create(new TranslatableText("text.game_gui.gui.open"), openGameTypeBuilder -> {
             for (Identifier gameType : GameType.REGISTRY.keySet()) {
                 if (gameType.toString().equals("plasmid:test")) continue;
-                openGameTypeBuilder.add(OpenGameTypeEntry.ofItem(GameGui.getGameInfos(gameType).get()).withGameType(gameType));
+                openGameTypeBuilder.add(GuiEntry.openGameTypeEntryOf(GameGui.getGameInfos(gameType).get()).withGameType(gameType));
             }
         }));
     }
