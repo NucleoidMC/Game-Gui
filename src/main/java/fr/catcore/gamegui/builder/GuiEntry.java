@@ -1,5 +1,6 @@
 package fr.catcore.gamegui.builder;
 
+import fr.catcore.gamegui.builder.gamebuilder.CreateGameTypeEntry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -33,6 +34,14 @@ public abstract class GuiEntry {
 
     public static OpenGameTypeEntry openGameTypeEntryOf(Item icon) {
         return openGameTypeEntryOf(new ItemStack(icon));
+    }
+
+    public static CreateGameTypeEntry createGameTypeEntryOf(ItemStack icon) {
+        return new CreateGameTypeEntry(icon);
+    }
+
+    public static CreateGameTypeEntry createGameTypeEntryOf(Item icon) {
+        return createGameTypeEntryOf(new ItemStack(icon));
     }
 
     public ItemStack getIcon() {
