@@ -42,10 +42,7 @@ public class GameGUIInventory<B extends GuiBuilder, E extends GuiEntry> implemen
     }
 
     private void buildGrid(List<E> elements) {
-        System.out.println(elements);
-        System.out.println(this.elements.size());
         this.fill(null);
-        System.out.println(this.elements.size());
         int rows = MathHelper.ceil((double)elements.size() / 7.0D);
 
         for(int row = 0; row < rows; ++row) {
