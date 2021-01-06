@@ -36,7 +36,7 @@ public class CreateGameTypeEntry extends GuiEntry {
     }
 
     public void onClick(ServerPlayerEntity player) {
-        CodecToStringParser.parse(((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().toString());
+        CodecToStringParser.parse(this.gameType.toString(), ((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().toString());
 //        System.out.println(((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().toString());
 //        System.out.println(((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().getClass().toString());
 //        RecordCodecBuilder recordCodecBuilder = (RecordCodecBuilder) (Object) ((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec();
