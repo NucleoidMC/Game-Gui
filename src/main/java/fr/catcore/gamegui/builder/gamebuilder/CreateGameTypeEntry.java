@@ -1,13 +1,11 @@
 package fr.catcore.gamegui.builder.gamebuilder;
 
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import fr.catcore.gamegui.GameGui;
 import fr.catcore.gamegui.builder.GuiEntry;
-import fr.catcore.gamegui.codec.CodecToStringParser;
-import fr.catcore.gamegui.codec.RecoderCoderBuilderRegistry;
-import fr.catcore.gamegui.mixin.codec.RecordCodecBuilderAccessor;
+import fr.catcore.gamegui.codec.GameTypeCoderNBTRegistry;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -36,7 +34,7 @@ public class CreateGameTypeEntry extends GuiEntry {
     }
 
     public void onClick(ServerPlayerEntity player) {
-        CodecToStringParser.parse(this.gameType.toString(), ((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().toString());
+        CompoundTag codecNBT = GameTypeCoderNBTRegistry.getCodecNBT(this.gameType.toString(), ((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().toString());
 //        System.out.println(((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().toString());
 //        System.out.println(((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().getClass().toString());
 //        RecordCodecBuilder recordCodecBuilder = (RecordCodecBuilder) (Object) ((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec();

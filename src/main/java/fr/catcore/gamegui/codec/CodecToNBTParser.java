@@ -9,7 +9,7 @@ import xyz.nucleoid.plasmid.error.ErrorReporter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CodecToStringParser {
+public class CodecToNBTParser {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -18,7 +18,7 @@ public class CodecToStringParser {
     private String gameType;
     private ErrorReporter errorReporter;
 
-    private CodecToStringParser(String gameType, String mapCodecToString) {
+    private CodecToNBTParser(String gameType, String mapCodecToString) {
         this.gameType = gameType;
         this.errorReporter = ErrorReporter.open("GameGui game config generator with gametype: " + this.gameType);
         this.mapCodecToString = mapCodecToString
@@ -26,18 +26,28 @@ public class CodecToStringParser {
                 .replace("[mapped]", "")
                 .replace("[comapFlatMapped]", "");
         this.compoundTag = this.handle(this.mapCodecToString);
-        LOGGER.info(this.compoundTag.toString());
+//        LOGGER.info(this.compoundTag.toString());
         this.errorReporter.close();
     }
 
-    public static void parse(String gameType, String mapCodecToString) {
+    public String getGameType() {
+        return gameType;
+    }
+
+    public CompoundTag getCompoundTag() {
+        return compoundTag;
+    }
+
+    public static CompoundTag parse(String gameType, String mapCodecToString) {
         if (!mapCodecToString.startsWith("RecordCodec")) {
             cantHandle(mapCodecToString);
-            return;
+            return new CompoundTag();
         }
 //
 
-        new CodecToStringParser(gameType, mapCodecToString);
+        CodecToNBTParser codecToNBT = new CodecToNBTParser(gameType, mapCodecToString);
+
+        return CodecNBTSimplifier.simplifyCodecNBT(codecToNBT.compoundTag);
 
 //        LOGGER.info(mapCodecToString);
     }
