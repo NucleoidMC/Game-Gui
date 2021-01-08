@@ -1,15 +1,17 @@
 package fr.catcore.gamegui.builder.gamebuilder;
 
-import com.mojang.serialization.MapCodec;
 import fr.catcore.gamegui.GameGui;
 import fr.catcore.gamegui.builder.GuiEntry;
+import fr.catcore.gamegui.builder.gamebuilder.main.MainGuiEntry;
+import fr.catcore.gamegui.codec.GameCreatorHelper;
 import fr.catcore.gamegui.codec.GameTypeCoderNBTRegistry;
+import fr.catcore.gamegui.ui.codec.ConfigureGameMainUi;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import xyz.nucleoid.plasmid.game.GameType;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 
 public class CreateGameTypeEntry extends GuiEntry {
@@ -34,7 +36,23 @@ public class CreateGameTypeEntry extends GuiEntry {
     }
 
     public void onClick(ServerPlayerEntity player) {
-        CompoundTag codecNBT = GameTypeCoderNBTRegistry.getCodecNBT(this.gameType.toString(), ((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().toString());
+        CompoundTag codecNBT = GameTypeCoderNBTRegistry.getCodecNBT(this.gameType);
+        if (codecNBT.getKeys().size() == 0) return;
+
+        CompoundTag currentConfig = new CompoundTag();
+        currentConfig.putString("type", this.gameType.toString());
+        currentConfig.putString("name", this.gameType.toString());
+
+        GameCreatorHelper.startCreatingConfig(player.getUuid(), currentConfig);
+
+        player.openHandledScreen(ConfigureGameMainUi.create(new LiteralText("Configure Game: Main"), mainGuiEntryCodecGuiBuilder -> {
+            System.out.println("creating");
+            mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createType());
+            mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createName());
+            mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createConfig());
+            mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createLaunch());
+        }));
+
 //        System.out.println(((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().toString());
 //        System.out.println(((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().getClass().toString());
 //        RecordCodecBuilder recordCodecBuilder = (RecordCodecBuilder) (Object) ((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec();

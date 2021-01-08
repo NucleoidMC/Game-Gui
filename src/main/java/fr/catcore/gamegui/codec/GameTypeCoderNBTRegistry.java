@@ -3,6 +3,8 @@ package fr.catcore.gamegui.codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Identifier;
+import xyz.nucleoid.plasmid.game.GameType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,10 +23,14 @@ public class GameTypeCoderNBTRegistry {
         RECORD_CODEC_BUILDERS.add(builder);
     }
 
-    public static CompoundTag getCodecNBT(String gameType, String stringCodec) {
-        if (!GAME_TYPE_TO_CODEC_NBT.containsKey(gameType)) GAME_TYPE_TO_CODEC_NBT.put(gameType, CodecToNBTParser.parse(gameType, stringCodec));
+    public static CompoundTag getCodecNBT(Identifier gameType, String stringCodec) {
+        if (!GAME_TYPE_TO_CODEC_NBT.containsKey(gameType.toString())) GAME_TYPE_TO_CODEC_NBT.put(gameType.toString(), CodecToNBTParser.parse(gameType.toString(), stringCodec));
 
-        return GAME_TYPE_TO_CODEC_NBT.get(gameType);
+        return GAME_TYPE_TO_CODEC_NBT.get(gameType.toString());
+    }
+
+    public static CompoundTag getCodecNBT(Identifier gameType) {
+        return getCodecNBT(gameType, ((MapCodec.MapCodecCodec) GameType.get(gameType).getConfigCodec()).codec().toString());
     }
 
     public static void mapCodec(MapCodec<?> mapCodec) {
