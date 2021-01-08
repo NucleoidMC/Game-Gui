@@ -16,6 +16,8 @@ import xyz.nucleoid.plasmid.game.ConfiguredGame;
 import xyz.nucleoid.plasmid.game.GameOpenException;
 import xyz.nucleoid.plasmid.game.GameSpace;
 import xyz.nucleoid.plasmid.game.ManagedGameSpace;
+import xyz.nucleoid.plasmid.game.channel.GameChannel;
+import xyz.nucleoid.plasmid.game.channel.GameChannelManager;
 import xyz.nucleoid.plasmid.game.config.GameConfigs;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 
@@ -46,11 +48,21 @@ public class OpenConfiguredGameEntry extends GuiEntry {
         if (game == null) return;
         PlayerManager playerManager = server.getPlayerManager();
         server.submit(() -> {
+
+            if (player != null) {
+                ManagedGameSpace currentGameSpace = ManagedGameSpace.forWorld(player.world);
+                if (currentGameSpace != null) {
+                    currentGameSpace.removePlayer(player);
+                }
+            }
+
+
+            GameChannelManager channelManager = GameChannelManager.get(server);
             try {
-                game.open(server).handle((v, throwable) -> {
+                channelManager.openOneshot(this.gameConfig, game).handle((channel, throwable) -> {
                     if (throwable == null) {
-                        onOpenSuccess(player, this.gameConfig, playerManager);
-                        joinGame(v, player);
+                        joinGame(channel, player);
+                        onOpenSuccess(channel, player, this.gameConfig, game, playerManager);
                     } else {
                         onOpenError(playerManager, throwable);
                     }
@@ -63,12 +75,8 @@ public class OpenConfiguredGameEntry extends GuiEntry {
         });
     }
 
-    private static void onOpenSuccess(ServerPlayerEntity playerEntity, Identifier gameId, PlayerManager playerManager) {
-        String command = "/game join " + gameId;
-        ClickEvent joinClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
-        HoverEvent joinHover = new HoverEvent(net.minecraft.text.HoverEvent.Action.SHOW_TEXT, new LiteralText(command));
-        Style joinStyle = Style.EMPTY.withFormatting(Formatting.UNDERLINE).withColor(Formatting.BLUE).withClickEvent(joinClick).withHoverEvent(joinHover);
-        Text openMessage = new TranslatableText("text.plasmid.game.open.opened", playerEntity.getDisplayName(), gameId).append(new TranslatableText("text.plasmid.game.open.join").setStyle(joinStyle));
+    private static void onOpenSuccess(GameChannel channel, ServerPlayerEntity playerEntity, Identifier gameId,ConfiguredGame<?> game, PlayerManager playerManager) {
+        Text openMessage = new TranslatableText("text.plasmid.game.open.opened", playerEntity.getDisplayName(), new LiteralText(game.getDisplayName(gameId))).append(channel.createJoinLink());
         playerManager.broadcastChatMessage(openMessage, MessageType.SYSTEM, Util.NIL_UUID);
     }
 
@@ -84,18 +92,9 @@ public class OpenConfiguredGameEntry extends GuiEntry {
         playerManager.broadcastChatMessage(((MutableText)message).formatted(Formatting.RED), MessageType.SYSTEM, Util.NIL_UUID);
     }
 
-    private static void joinGame(GameSpace gameWorld, ServerPlayerEntity playerEntity) {
-        ManagedGameSpace managedGameSpace = ManagedGameSpace.forWorld(gameWorld.getWorld());
-        if (managedGameSpace == null) {
-            playerEntity.closeHandledScreen();
-        } else {
-            managedGameSpace.offerPlayer(playerEntity).thenAccept((joinResult) -> {
-                if (joinResult.isError()) {
-                    Text error = joinResult.getError();
-                    playerEntity.sendMessage(error.shallowCopy().formatted(Formatting.RED), MessageType.CHAT, Util.NIL_UUID);
-                }
-
-            });
+    private static void joinGame(GameChannel channel, ServerPlayerEntity player) {
+        if (player != null && ManagedGameSpace.forWorld(player.world) == null) {
+            channel.requestJoin(player);
         }
     }
 }
