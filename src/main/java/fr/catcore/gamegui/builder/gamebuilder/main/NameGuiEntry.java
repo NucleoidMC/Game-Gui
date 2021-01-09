@@ -1,5 +1,6 @@
 package fr.catcore.gamegui.builder.gamebuilder.main;
 
+import fr.catcore.gamegui.builder.gamebuilder.property.string.StringGuiEntry;
 import fr.catcore.gamegui.codec.GameCreatorHelper;
 import fr.catcore.gamegui.ui.codec.StringPropertyEditingUi;
 import net.minecraft.item.ItemStack;
@@ -22,12 +23,13 @@ public class NameGuiEntry extends PropertyMainGuiEntry {
     @Override
     public void onClick(ServerPlayerEntity player) {
         GameCreatorHelper.setEditingField(player.getUuid(), "name");
-        player.closeHandledScreen();
+
         player.openHandledScreen(StringPropertyEditingUi.create(new LiteralText("Test"), mainGuiEntryCodecGuiBuilder -> {
-            mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createType());
-            mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createType());
-            mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createType());
-            mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createType());
+            mainGuiEntryCodecGuiBuilder.add(StringGuiEntry.createEditedString());
+//            mainGuiEntryCodecGuiBuilder.add(StringGuiEntry.createDone());
+//            for (String chr : GameCreatorHelper.getPossibleChars()) {
+//                mainGuiEntryCodecGuiBuilder.add(StringGuiEntry.createCharEntry(chr));
+//            }
         }));
     }
 }
