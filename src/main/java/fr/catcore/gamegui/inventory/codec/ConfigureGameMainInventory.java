@@ -22,9 +22,4 @@ public class ConfigureGameMainInventory extends CodecGuiInventory<MainGuiEntry> 
         list.add(7);
         return list;
     }
-
-    @Override
-    public int size() {
-        return 9;
-    }
 }

@@ -27,6 +27,11 @@ public abstract class CodecGuiInventory<E extends CodecGuiEntry> implements Inve
         this.buildGrid();
     }
 
+    @Override
+    public int size() {
+        return 62;
+    }
+
     public abstract List<Integer> getFillableSlots();
 
     private void buildGrid() {
@@ -40,9 +45,6 @@ public abstract class CodecGuiInventory<E extends CodecGuiEntry> implements Inve
 
         for (int index = 0; index < this.getFillableSlots().size(); index++) {
             this.elements.set(this.getFillableSlots().get(index), elements.get(index));
-        }
-        for (CodecGuiEntry element : this.elements) {
-            System.out.println(element.getClass().getName());
         }
     }
 
@@ -105,11 +107,9 @@ public abstract class CodecGuiInventory<E extends CodecGuiEntry> implements Inve
     }
 
     private void handleElementClick(int index) {
-        System.out.println(index);
         this.player.inventory.setCursorStack(ItemStack.EMPTY);
         this.player.updateCursorStack();
         CodecGuiEntry element = this.elements.get(index);
-        System.out.println(element);
         if (element != null) {
             element.onClick(this.player);
         }

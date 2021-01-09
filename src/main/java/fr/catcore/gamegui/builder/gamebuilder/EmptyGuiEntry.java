@@ -8,7 +8,7 @@ import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 
 public class EmptyGuiEntry extends CodecGuiEntry {
     public EmptyGuiEntry() {
-        super(new ItemStack(Items.GREEN_STAINED_GLASS_PANE), new LiteralText(""));
+        super(new ItemStack(Items.AIR), new LiteralText(""));
     }
 
     @Override

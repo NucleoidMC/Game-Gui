@@ -21,8 +21,13 @@ public class NameGuiEntry extends PropertyMainGuiEntry {
 
     @Override
     public void onClick(ServerPlayerEntity player) {
-        System.out.println("Name");
         GameCreatorHelper.setEditingField(player.getUuid(), "name");
-        player.openHandledScreen(StringPropertyEditingUi.create(new LiteralText("Test"), mainGuiEntryCodecGuiBuilder -> {}));
+        player.closeHandledScreen();
+        player.openHandledScreen(StringPropertyEditingUi.create(new LiteralText("Test"), mainGuiEntryCodecGuiBuilder -> {
+            mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createType());
+            mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createType());
+            mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createType());
+            mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createType());
+        }));
     }
 }

@@ -32,30 +32,30 @@ public class StringPropertyEditingUi implements NamedScreenHandlerFactory {
 
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
         final ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
-        ConfigureGameMainInventory inventory = new ConfigureGameMainInventory(serverPlayer, this.builder);
-        return new AnvilScreenHandler(syncId, playerInventory) {
-            public ItemStack transferSlot(PlayerEntity player, int invSlot) {
-                this.resendInventory();
-                return ItemStack.EMPTY;
-            }
-
-            public ItemStack onSlotClick(int slot, int data, SlotActionType action, PlayerEntity player) {
-                if (action != SlotActionType.SWAP && action != SlotActionType.THROW && action != SlotActionType.CLONE) {
-                    return super.onSlotClick(slot, data, action, player);
-                } else {
-                    this.resendInventory();
-                    return ItemStack.EMPTY;
-                }
-            }
-
-            private void resendInventory() {
-                serverPlayer.onHandlerRegistered(this, this.getStacks());
-            }
-
-            @Override
-            protected boolean canTakeOutput(PlayerEntity player, boolean present) {
-                return true;
-            }
+//        ConfigureGameMainInventory inventory = new ConfigureGameMainInventory(serverPlayer, this.builder);
+        return new AnvilScreenHandler(syncId, playerInventory, ScreenHandlerContext.EMPTY) {
+//            public ItemStack transferSlot(PlayerEntity player, int invSlot) {
+//                this.resendInventory();
+//                return ItemStack.EMPTY;
+//            }
+//
+//            public ItemStack onSlotClick(int slot, int data, SlotActionType action, PlayerEntity player) {
+//                if (action != SlotActionType.SWAP && action != SlotActionType.THROW && action != SlotActionType.CLONE) {
+//                    return super.onSlotClick(slot, data, action, player);
+//                } else {
+//                    this.resendInventory();
+//                    return ItemStack.EMPTY;
+//                }
+//            }
+//
+//            private void resendInventory() {
+//                serverPlayer.onHandlerRegistered(this, this.getStacks());
+//            }
+//
+//            @Override
+//            protected boolean canTakeOutput(PlayerEntity player, boolean present) {
+//                return true;
+//            }
         };
     }
 }

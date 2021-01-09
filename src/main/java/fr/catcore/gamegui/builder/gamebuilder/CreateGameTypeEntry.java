@@ -45,8 +45,8 @@ public class CreateGameTypeEntry extends GuiEntry {
 
         GameCreatorHelper.startCreatingConfig(player.getUuid(), currentConfig);
 
+        player.closeHandledScreen();
         player.openHandledScreen(ConfigureGameMainUi.create(new LiteralText("Configure Game: Main"), mainGuiEntryCodecGuiBuilder -> {
-            System.out.println("creating");
             mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createType());
             mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createName());
             mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createConfig());
