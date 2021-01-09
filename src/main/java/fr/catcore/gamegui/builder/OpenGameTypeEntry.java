@@ -1,12 +1,11 @@
 package fr.catcore.gamegui.builder;
 
 import fr.catcore.gamegui.GameGui;
-import fr.catcore.gamegui.ui.OpenConfiguredGameUi;
-import net.minecraft.item.ItemConvertible;
+import fr.catcore.gamegui.accessor.GenericContainerScreenHandlerAccessor;
+import fr.catcore.gamegui.inventory.OpenConfiguredGameInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 
@@ -32,14 +31,14 @@ public class OpenGameTypeEntry extends GuiEntry {
     }
 
     public void onClick(ServerPlayerEntity player) {
-        player.openHandledScreen(OpenConfiguredGameUi.create(new TranslatableText("text.game_gui.gui.open"),
-                openConfiguredGameBuilder -> {
+        OpenConfiguredGameInventory inventory = new OpenConfiguredGameInventory(player, openConfiguredGameBuilder -> {
             Identifier[] configs = GameGui.getConfigsFromType(this.gameType);
             for (Identifier configuredGame : configs) {
                 openConfiguredGameBuilder.add(GuiEntry
                         .openConfiguredGameEntryOf(GameGui.getGameInfos(this.gameType).get())
                         .withGameConfig(configuredGame));
             }
-        }));
+        });
+        ((GenericContainerScreenHandlerAccessor)player.currentScreenHandler).setInventory(inventory, player);
     }
 }
