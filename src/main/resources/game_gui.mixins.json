@@ -4,7 +4,11 @@
   "package": "fr.catcore.gamegui.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MixinPlayerManager"
+    "MixinAnvilScreenHandler",
+    "MixinForgingScreenHandler",
+    "MixinGenericContainerGenericContainerScreenHandler",
+    "MixinPlayerManager",
+    "MixinScreenHandler"
   ],
   "client": [
   ],

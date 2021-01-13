@@ -1,6 +1,11 @@
 package fr.catcore.gamegui.util;
 
 import com.mojang.brigadier.tree.CommandNode;
+import fr.catcore.gamegui.accessor.ForgingScreenHandlerAccessor;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.ForgingScreenHandler;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -42,5 +47,21 @@ public class Utils {
         }
 
         return null;
+    }
+
+    public static Slot createAnonymousSlot(ForgingScreenHandler forgingScreenHandler) {
+        return new Slot(((ForgingScreenHandlerAccessor)forgingScreenHandler).getCraftingResult(), 2, 134, 47) {
+            public boolean canInsert(ItemStack stack) {
+                return false;
+            }
+
+            public boolean canTakeItems(PlayerEntity playerEntity) {
+                return ((ForgingScreenHandlerAccessor)forgingScreenHandler).canTakeOutput_public(playerEntity, this.hasStack());
+            }
+
+            public ItemStack onTakeItem(PlayerEntity player, ItemStack stack) {
+                return ((ForgingScreenHandlerAccessor)forgingScreenHandler).onTakeOutput_public(player, stack);
+            }
+        };
     }
 }
