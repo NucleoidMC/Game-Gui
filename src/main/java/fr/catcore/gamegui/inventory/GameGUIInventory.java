@@ -30,18 +30,27 @@ public class GameGUIInventory<B extends GuiBuilder, E extends GuiEntry> implemen
         this.buildGrid();
     }
 
-    private void buildGrid() {
+    public ServerPlayerEntity getPlayer() {
+        return player;
+    }
+
+    public List<E> getElements() {
         try {
-            B builder = (B) ((Class)((ParameterizedType)this.getClass().
+            B builder = (B) ((Class) ((ParameterizedType) this.getClass().
                     getGenericSuperclass()).getActualTypeArguments()[0]).newInstance();
             this.builder.accept(builder);
-            this.buildGrid(builder.getElements());
+            return builder.getElements();
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
+        return new ArrayList<>();
     }
 
-    private void buildGrid(List<E> elements) {
+    protected void buildGrid() {
+        this.buildGrid(this.getElements());
+    }
+
+    protected void buildGrid(List<E> elements) {
         this.fill(null);
         int rows = MathHelper.ceil((double)elements.size() / 7.0D);
 
@@ -57,7 +66,7 @@ public class GameGUIInventory<B extends GuiBuilder, E extends GuiEntry> implemen
 
     }
 
-    private void fill(E elm) {
+    protected void fill(E elm) {
         for (int i = 0; i < this.size(); i++) {
             try {
                 this.elements.set(i, elm);
@@ -67,7 +76,7 @@ public class GameGUIInventory<B extends GuiBuilder, E extends GuiEntry> implemen
         }
     }
 
-    private List<E> resolveRow(List<E> elements, int row) {
+    protected List<E> resolveRow(List<E> elements, int row) {
         int minId = 2147483647;
         int maxId = -2147483648;
         int rowStart = row * 7;
@@ -105,8 +114,12 @@ public class GameGUIInventory<B extends GuiBuilder, E extends GuiEntry> implemen
     }
 
     public ItemStack getStack(int index) {
-        E element = this.elements.get(index);
+        E element = this.getElement(index);
         return element == null ? ItemStack.EMPTY : element.createIcon(this.player);
+    }
+
+    public E getElement(int index) {
+        return this.elements.get(index);
     }
 
     public ItemStack removeStack(int index, int count) {
@@ -119,10 +132,10 @@ public class GameGUIInventory<B extends GuiBuilder, E extends GuiEntry> implemen
         return ItemStack.EMPTY;
     }
 
-    private void handleElementClick(int index) {
+    protected void handleElementClick(int index) {
         this.player.inventory.setCursorStack(ItemStack.EMPTY);
         this.player.updateCursorStack();
-        E element = this.elements.get(index);
+        E element = this.getElement(index);
         if (element != null) {
             element.onClick(this.player);
         }
