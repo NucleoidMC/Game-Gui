@@ -12,8 +12,7 @@ group = project.maven_group
 
 repositories {
     mavenLocal()
-    maven { url = "https://jitpack.io/" }
-    maven { url = "https://maven.gegy.dev/" }
+    maven { url = "https://maven.nucleoid.xyz/" }
     maven {
         url = "https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/"
     }
@@ -21,6 +20,7 @@ repositories {
         url = 'https://raw.githubusercontent.com/GrossFabricHackers/maven/master/'
     }
     maven {url = "https://dl.bintray.com/user11681/maven"}
+//    maven { url = "https://jitpack.io/" }
 }
 
 dependencies {
@@ -33,7 +33,7 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modApi "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modImplementation "xyz.nucleoid:plasmid:0.4.94"
+    modImplementation "xyz.nucleoid:plasmid:0.4.105"
 
 //    modRuntime ("com.github.jellysquid3:sodium-fabric:b9c2ad3c38b16275cf2f1a81dcfb2fee1563905b")
 //    modRuntime ("com.github.jellysquid3:phosphor-fabric:0749029a498e8f6574643285bae7aecb2eda76b8")
@@ -44,12 +44,12 @@ dependencies {
 //    }
 
     // Test Minigames
-    modRuntime ("com.github.NucleoidMC:D-Coudre:1.16.2-SNAPSHOT")
-    modRuntime ("com.github.NucleoidMC:koth:-SNAPSHOT")
+//    modRuntime ("com.github.NucleoidMC:D-Coudre:1.16.2-SNAPSHOT")
+//    modRuntime ("com.github.NucleoidMC:koth:-SNAPSHOT")
 //    modRuntime ("com.github.NucleoidMC:Creeperfall:-SNAPSHOT")
 //    modRuntime ("com.github.NucleoidMC:cavern-crawler:-SNAPSHOT")
 //    modRuntime ("com.github.NucleoidMC:Shard-Thief:-SNAPSHOT")
-    modRuntime ("com.github.NucleoidMC:survival-games:-SNAPSHOT")
+//    modRuntime ("com.github.NucleoidMC:survival-games:-SNAPSHOT")
 //    modRuntime ("com.github.NucleoidMC:loop-de-loop:-SNAPSHOT")
 //    modRuntime ("com.github.NucleoidMC:spleef:1.16.1-SNAPSHOT")
 //    modRuntime ("com.github.NucleoidMC:bed-wars:1.16-SNAPSHOT")
