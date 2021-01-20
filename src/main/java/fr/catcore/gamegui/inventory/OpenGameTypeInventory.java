@@ -7,9 +7,9 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.function.Consumer;
 
-public class OpenGameTypeInventory extends GameGUIInventory<OpenGameTypeBuilder, OpenGameTypeEntry> {
+public class OpenGameTypeInventory extends PagedGameGUIInventory<OpenGameTypeBuilder> {
 
     public OpenGameTypeInventory(ServerPlayerEntity player, Consumer<OpenGameTypeBuilder> builder) {
-        super(player, builder);
+        super(player, builder, 0);
     }
 }
