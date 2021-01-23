@@ -57,6 +57,36 @@ public class GameGui implements ModInitializer {
         registerGameTypeIcon("territorybattle:territory_battle", () -> new ItemStack(Items.GREEN_WOOL));
         registerGameTypeIcon("castlewars:castlewars", () -> new ItemStack(Items.VILLAGER_SPAWN_EGG));
         registerGameTypeIcon("capturetheflag:capturetheflag", () -> new ItemStack(Items.BLUE_BANNER));
+        registerGameTypeIcon("tnttag:tnttag", () -> new ItemStack(Items.TNT));
+        registerGameTypeIcon("minefield:minefield", () -> new ItemStack(Items.TRIPWIRE_HOOK));
+        registerGameTypeIcon("codebreaker:codebreaker", () -> new ItemStack(Items.REDSTONE_TORCH));
+        registerGameTypeIcon("cabinfever:cabinfever", () -> new ItemStack(Items.COAL));
+        registerGameTypeIcon("buildbattle:buildbattle", () -> new ItemStack(Items.CRAFTING_TABLE));
+        registerGameTypeIcon("totemhunt:totemhunt", () -> new ItemStack(Items.TOTEM_OF_UNDYING));
+        registerGameTypeIcon("downpour:downpour", () -> new ItemStack(Items.POTION));
+        registerGameTypeIcon("creeperfall:creeperfall", () -> new ItemStack(Items.CREEPER_HEAD));
+        registerGameTypeIcon("cakewars:cakewars", () -> new ItemStack(Items.CAKE));
+        registerGameTypeIcon("snowballfight:snowballfight", () -> new ItemStack(Items.SNOWBALL));
+        registerGameTypeIcon("beaconbreakers:beaconbreakers", () -> new ItemStack(Items.BEACON));
+        registerGameTypeIcon("werewolf:werewolf", () -> new ItemStack(Items.BONE));
+        registerGameTypeIcon("parkourrun:parkour_run", () -> new ItemStack(Items.HEAVY_WEIGHTED_PRESSURE_PLATE));
+        registerGameTypeIcon("elytron:elytron", () -> new ItemStack(Items.ELYTRA)); // Broken elytra
+        registerGameTypeIcon("bowbattle:bowbattle", () -> new ItemStack(Items.BOW));
+        registerGameTypeIcon("microbattle:microbattle", () -> new ItemStack(Items.DIAMOND_SWORD));
+        registerGameTypeIcon("anvildrop:anvil_drop", () -> new ItemStack(Items.ANVIL));
+        registerGameTypeIcon("duels:duels", () -> new ItemStack(Items.DIAMOND_AXE));
+        registerGameTypeIcon("skywars:skywars", () -> new ItemStack(Items.ENDER_PEARL));
+        registerGameTypeIcon("cornmaze:cornmaze", () -> new ItemStack(Items.HAY_BLOCK));
+        registerGameTypeIcon("irritaterrun:irritaterrun", () -> new ItemStack(Items.BAKED_POTATO));
+        registerGameTypeIcon("vacuole:vacuole", () -> new ItemStack(Items.RED_WOOL));
+        registerGameTypeIcon("destroythemonument:destroythemonument", () -> new ItemStack(Items.PRISMARINE_BRICKS));
+        registerGameTypeIcon("siege:siege", () -> new ItemStack(Items.SHIELD));
+        registerGameTypeIcon("mineout:mineout", () -> new ItemStack(Items.DIAMOND_PICKAXE));
+        registerGameTypeIcon("caverncrawler:caverncrawler", () -> new ItemStack(Items.COBWEB));
+        registerGameTypeIcon("creative_party:creative_party", () -> new ItemStack(Items.COMMAND_BLOCK));
+        registerGameTypeIcon("fortress:fortress", () -> new ItemStack(Items.BLUE_WOOL));
+        registerGameTypeIcon("quakecraft:quakecraft", () -> new ItemStack(Items.IRON_HOE));
+        registerGameTypeIcon("castle_wars:castle_wars", () -> new ItemStack(Items.STONE_BRICK_WALL));
     }
 
     public static void registerGameTypeIcon(Identifier gameTypeId, Supplier<ItemStack> icon) {
