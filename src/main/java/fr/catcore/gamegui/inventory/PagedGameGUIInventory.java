@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class PagedGameGUIInventory<B extends GuiBuilder> extends GameGUIInventory<B, GuiEntry> {
+public abstract class PagedGameGUIInventory<B extends GuiBuilder> extends GameGUIInventory<B, GuiEntry> {
 
     private int pageIndex = 0;
-    private List<GuiEntry> pageElements;
+    protected List<GuiEntry> pageElements;
 
     public PagedGameGUIInventory(ServerPlayerEntity player, Consumer<B> builder, int page) {
         super(player, builder);
@@ -53,7 +53,10 @@ public class PagedGameGUIInventory<B extends GuiBuilder> extends GameGUIInventor
                 PagedGameGUIInventory.this.setPageIndex(PagedGameGUIInventory.this.pageIndex + 1);
             }
         });
+        this.addAdditionalEntry();
     }
+
+    public abstract void addAdditionalEntry();
 
     public void setPageIndex(int pageIndex) {
         this.pageIndex = pageIndex;
@@ -108,5 +111,9 @@ public class PagedGameGUIInventory<B extends GuiBuilder> extends GameGUIInventor
         }
 
         return page;
+    }
+
+    public int getPageIndex() {
+        return this.pageIndex;
     }
 }

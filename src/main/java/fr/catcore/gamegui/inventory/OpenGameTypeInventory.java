@@ -9,7 +9,12 @@ import java.util.function.Consumer;
 
 public class OpenGameTypeInventory extends PagedGameGUIInventory<OpenGameTypeBuilder> {
 
-    public OpenGameTypeInventory(ServerPlayerEntity player, Consumer<OpenGameTypeBuilder> builder) {
-        super(player, builder, 0);
+    public OpenGameTypeInventory(ServerPlayerEntity player, Consumer<OpenGameTypeBuilder> builder, int page) {
+        super(player, builder, page);
+    }
+
+    @Override
+    public void addAdditionalEntry() {
+
     }
 }

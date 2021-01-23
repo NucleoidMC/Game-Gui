@@ -3,6 +3,8 @@ package fr.catcore.gamegui.builder;
 import fr.catcore.gamegui.GameGui;
 import fr.catcore.gamegui.accessor.GenericContainerScreenHandlerAccessor;
 import fr.catcore.gamegui.inventory.OpenConfiguredGameInventory;
+import fr.catcore.gamegui.inventory.OpenGameTypeInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -31,14 +33,16 @@ public class OpenGameTypeEntry extends GuiEntry {
     }
 
     public void onClick(ServerPlayerEntity player) {
-        OpenConfiguredGameInventory inventory = new OpenConfiguredGameInventory(player, openConfiguredGameBuilder -> {
+        Inventory typeInventory = ((GenericContainerScreenHandlerAccessor)player.currentScreenHandler).getInventory();
+        OpenGameTypeInventory openGameTypeInventory = (OpenGameTypeInventory) typeInventory;
+        OpenConfiguredGameInventory configuredInventory = new OpenConfiguredGameInventory(player, openConfiguredGameBuilder -> {
             Identifier[] configs = GameGui.getConfigsFromType(this.gameType);
             for (Identifier configuredGame : configs) {
                 openConfiguredGameBuilder.add(GuiEntry
                         .openConfiguredGameEntryOf(GameGui.getGameInfos(this.gameType).get())
                         .withGameConfig(configuredGame));
             }
-        });
-        ((GenericContainerScreenHandlerAccessor)player.currentScreenHandler).setInventory(inventory, player);
+        }, openGameTypeInventory.getPageIndex());
+        ((GenericContainerScreenHandlerAccessor)player.currentScreenHandler).setInventory(configuredInventory, player);
     }
 }

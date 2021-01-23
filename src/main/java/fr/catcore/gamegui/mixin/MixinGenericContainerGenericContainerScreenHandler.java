@@ -48,4 +48,9 @@ public class MixinGenericContainerGenericContainerScreenHandler implements Gener
 
         ((ScreenHandler)(Object)this).sendContentUpdates();
     }
+
+    @Override
+    public Inventory getInventory() {
+        return this.inventory;
+    }
 }

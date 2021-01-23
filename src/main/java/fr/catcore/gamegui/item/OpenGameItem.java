@@ -41,13 +41,17 @@ public final class OpenGameItem extends Item implements FakeItem {
         return TypedActionResult.success(playerEntity.getStackInHand(hand));
     }
 
-    public static void openOpenScreen(PlayerEntity playerEntity) {
-        playerEntity.openHandledScreen(OpenGameTypeUi.create(new TranslatableText("text.game_gui.gui.open"), openGameTypeBuilder -> {
+    public static void openOpenScreen(PlayerEntity playerEntity, int page) {
+        playerEntity.openHandledScreen(OpenGameTypeUi.create(new TranslatableText("text.game_gui.gui.open"), page, openGameTypeBuilder -> {
             for (Identifier gameType : GameType.REGISTRY.keySet()) {
                 if (gameType.toString().equals("plasmid:test")) continue;
                 openGameTypeBuilder.add(GuiEntry.openGameTypeEntryOf(GameGui.getGameInfos(gameType).get()).withGameType(gameType));
             }
         }));
+    }
+
+    public static void openOpenScreen(PlayerEntity playerEntity) {
+        openOpenScreen(playerEntity, 0);
     }
 
     @Override
