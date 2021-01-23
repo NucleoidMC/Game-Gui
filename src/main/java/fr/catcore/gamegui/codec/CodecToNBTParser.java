@@ -81,6 +81,8 @@ public class CodecToNBTParser {
             return this.handleDouble(codecString);
         } else if (codecString.startsWith("passthrough")) {
             return this.handleCompoundTag(codecString);
+        } else if (codecString.startsWith("Float")) {
+            return this.handleFloat(codecString);
         }
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             LOGGER.warn("Don't know how to handle " + codecString.split("\\[")[0] +"! (" + codecString + ")");
@@ -232,6 +234,13 @@ public class CodecToNBTParser {
     private CompoundTag handleDouble(String Double) {
         CompoundTag tag = new CompoundTag();
         tag.putString("type", "double");
+
+        return tag;
+    }
+
+    private CompoundTag handleFloat(String Float) {
+        CompoundTag tag = new CompoundTag();
+        tag.putString("type", "float");
 
         return tag;
     }
