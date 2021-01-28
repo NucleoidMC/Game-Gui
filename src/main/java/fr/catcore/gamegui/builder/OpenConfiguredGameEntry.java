@@ -1,95 +1,93 @@
 package fr.catcore.gamegui.builder;
 
-import fr.catcore.gamegui.GameGui;
-import net.minecraft.item.ItemConvertible;
+import fr.catcore.gamegui.GameConfigMetadata;
+import fr.catcore.server.translations.api.LocalizationTarget;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.MessageType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.*;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import xyz.nucleoid.plasmid.Plasmid;
 import xyz.nucleoid.plasmid.game.ConfiguredGame;
 import xyz.nucleoid.plasmid.game.GameOpenException;
-import xyz.nucleoid.plasmid.game.GameSpace;
 import xyz.nucleoid.plasmid.game.ManagedGameSpace;
 import xyz.nucleoid.plasmid.game.channel.GameChannel;
 import xyz.nucleoid.plasmid.game.channel.GameChannelManager;
-import xyz.nucleoid.plasmid.game.config.GameConfigs;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 
 public class OpenConfiguredGameEntry extends GuiEntry {
-    private Identifier gameConfig;
+    private final GameConfigMetadata config;
 
-    protected OpenConfiguredGameEntry(ItemStack icon) {
-        super(icon);
+    public OpenConfiguredGameEntry(GameConfigMetadata config) {
+        super(config.getIconOr(new ItemStack(Items.BARRIER)));
+        this.config = config;
     }
 
-    public OpenConfiguredGameEntry withGameConfig(Identifier gameConfig) {
-        this.gameConfig = gameConfig;
-        return this;
-    }
-
+    @Override
     public ItemStack createIcon(ServerPlayerEntity player) {
         ItemStackBuilder builder = ItemStackBuilder.of(this.getIcon());
-        builder.setName(GameGui.getGameConfigName(this.gameConfig));
-        for (Text text : GameGui.getGameConfigDescription(this.gameConfig)) {
-            builder.addLore(text);
+        builder.setName(this.config.getName());
+
+        Text[] description = this.config.getDescriptionFor((LocalizationTarget) player);
+        if (description != null) {
+            for (Text text : description) {
+                builder.addLore(text);
+            }
         }
-        return builder.build().copy();
+
+        return builder.build();
     }
 
+    @Override
     public void onClick(ServerPlayerEntity player) {
         MinecraftServer server = player.getServer();
-        ConfiguredGame<?> game = GameConfigs.get(this.gameConfig);
-        if (game == null) return;
         PlayerManager playerManager = server.getPlayerManager();
         server.submit(() -> {
-
-            if (player != null) {
-                ManagedGameSpace currentGameSpace = ManagedGameSpace.forWorld(player.world);
-                if (currentGameSpace != null) {
-                    currentGameSpace.removePlayer(player);
-                }
+            ManagedGameSpace currentGameSpace = ManagedGameSpace.forWorld(player.world);
+            if (currentGameSpace != null) {
+                currentGameSpace.removePlayer(player);
             }
-
 
             GameChannelManager channelManager = GameChannelManager.get(server);
             try {
-                channelManager.openOneshot(this.gameConfig, game).handle((channel, throwable) -> {
+                ConfiguredGame<?> game = this.config.getGame();
+                channelManager.openOneshot(game.getType().getIdentifier(), game).handle((channel, throwable) -> {
                     if (throwable == null) {
                         joinGame(channel, player);
-                        onOpenSuccess(channel, player, this.gameConfig, game, playerManager);
+                        onOpenSuccess(channel, player, game, playerManager);
                     } else {
                         onOpenError(playerManager, throwable);
                     }
 
                     return null;
                 });
-            } catch (Throwable var5) {
-                onOpenError(playerManager, var5);
+            } catch (Throwable t) {
+                onOpenError(playerManager, t);
             }
         });
     }
 
-    private static void onOpenSuccess(GameChannel channel, ServerPlayerEntity playerEntity, Identifier gameId,ConfiguredGame<?> game, PlayerManager playerManager) {
-        Text openMessage = new TranslatableText("text.plasmid.game.open.opened", playerEntity.getDisplayName(), new LiteralText(game.getDisplayName(gameId))).append(channel.createJoinLink());
+    private static void onOpenSuccess(GameChannel channel, ServerPlayerEntity playerEntity, ConfiguredGame<?> game, PlayerManager playerManager) {
+        Text openMessage = new TranslatableText("text.plasmid.game.open.opened", playerEntity.getDisplayName(), game.getNameText().shallowCopy().append(channel.createJoinLink()));
         playerManager.broadcastChatMessage(openMessage, MessageType.SYSTEM, Util.NIL_UUID);
     }
 
     private static void onOpenError(PlayerManager playerManager, Throwable throwable) {
         Plasmid.LOGGER.error("Failed to start game", throwable);
-        Object message;
+        MutableText message;
         if (throwable instanceof GameOpenException) {
-            message = ((GameOpenException)throwable).getReason().shallowCopy();
+            message = ((GameOpenException) throwable).getReason().shallowCopy();
         } else {
             message = new TranslatableText("text.plasmid.game.open.error");
         }
 
-        playerManager.broadcastChatMessage(((MutableText)message).formatted(Formatting.RED), MessageType.SYSTEM, Util.NIL_UUID);
+        playerManager.broadcastChatMessage(message.formatted(Formatting.RED), MessageType.SYSTEM, Util.NIL_UUID);
     }
 
     private static void joinGame(GameChannel channel, ServerPlayerEntity player) {

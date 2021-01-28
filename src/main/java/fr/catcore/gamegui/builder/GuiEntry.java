@@ -1,5 +1,6 @@
 package fr.catcore.gamegui.builder;
 
+import fr.catcore.gamegui.GameConfigMetadata;
 import fr.catcore.gamegui.builder.gamebuilder.CreateGameTypeEntry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,20 +13,12 @@ public abstract class GuiEntry {
         this.icon = icon;
     }
 
-    public static JoinGameEntry joinGameEntryOf(ItemStack icon) {
-        return new JoinGameEntry(icon);
+    public static JoinGameEntry joinGameEntryOf(GameConfigMetadata config) {
+        return new JoinGameEntry(config);
     }
 
-    public static JoinGameEntry joinGameEntryOf(Item icon) {
-        return joinGameEntryOf(new ItemStack(icon));
-    }
-
-    public static OpenConfiguredGameEntry openConfiguredGameEntryOf(ItemStack icon) {
-        return new OpenConfiguredGameEntry(icon);
-    }
-
-    public static OpenConfiguredGameEntry openConfiguredGameEntryOf(Item icon) {
-        return openConfiguredGameEntryOf(new ItemStack(icon));
+    public static OpenConfiguredGameEntry openConfiguredGameEntryOf(GameConfigMetadata config) {
+        return new OpenConfiguredGameEntry(config);
     }
 
     public static OpenGameTypeEntry openGameTypeEntryOf(ItemStack icon) {
