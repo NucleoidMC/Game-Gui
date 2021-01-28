@@ -29,8 +29,8 @@ public class GameTypeCoderNBTRegistry {
         return GAME_TYPE_TO_CODEC_NBT.get(gameType.toString());
     }
 
-    public static CompoundTag getCodecNBT(Identifier gameType) {
-        return getCodecNBT(gameType, ((MapCodec.MapCodecCodec) GameType.get(gameType).getConfigCodec()).codec().toString());
+    public static CompoundTag getCodecNBT(GameType<?> gameType) {
+        return getCodecNBT(gameType.getIdentifier(), ((MapCodec.MapCodecCodec) gameType.getConfigCodec()).codec().toString());
     }
 
     public static void mapCodec(MapCodec<?> mapCodec) {

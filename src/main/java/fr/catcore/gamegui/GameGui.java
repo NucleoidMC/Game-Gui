@@ -7,7 +7,6 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
@@ -15,6 +14,7 @@ import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import xyz.nucleoid.plasmid.game.ConfiguredGame;
+import xyz.nucleoid.plasmid.game.GameType;
 import xyz.nucleoid.plasmid.game.config.GameConfigs;
 
 import java.util.ArrayList;
@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class GameGui implements ModInitializer {
-
     private static final Map<String, Supplier<ItemStack>> gameTypeInfos = new HashMap<>();
 
     public static final Logger LOGGER = LogManager.getLogger();
@@ -105,12 +104,8 @@ public class GameGui implements ModInitializer {
         return gameTypeInfos.getOrDefault(id, () -> new ItemStack(Items.BARRIER));
     }
 
-    public static Text getGameTypeName(Identifier gameTypeID) {
-        if (ServerTranslations.INSTANCE.getLanguage("en_us")
-                .remote.contains(String.format("gameType.%s.%s", gameTypeID.getNamespace(), gameTypeID.getPath()))) {
-            return new TranslatableText(String.format("gameType.%s.%s", gameTypeID.getNamespace(), gameTypeID.getPath()));
-        }
-        return new LiteralText(gameTypeID.toString());
+    public static Supplier<ItemStack> getGameInfos(Identifier id) {
+        return getGameInfos(id.toString());
     }
 
     public static Text[] getGameTypeDescription(Identifier gameTypeID) {
@@ -124,37 +119,24 @@ public class GameGui implements ModInitializer {
         return lines.toArray(new Text[0]);
     }
 
-    public static Text getGameConfigName(Identifier gameTypeID) {
-        if (ServerTranslations.INSTANCE.getLanguage("en_us")
-                .remote.contains(String.format("gameConfig.%s.%s", gameTypeID.getNamespace(), gameTypeID.getPath()))) {
-            return new TranslatableText(String.format("gameConfig.%s.%s", gameTypeID.getNamespace(), gameTypeID.getPath()));
-        }
-        ConfiguredGame<?> configuredGame = GameConfigs.get(gameTypeID);
-        if (configuredGame == null) return new LiteralText(gameTypeID.toString());
-        return new LiteralText(configuredGame.getName());
-    }
-
-    public static Text[] getGameConfigDescription(Identifier gameTypeID) {
-        List<Text> lines = new ArrayList<>();
-        for (int i = 0; i <= 10; i++) {
-            if (ServerTranslations.INSTANCE.getLanguage("en_us")
-                    .remote.contains(String.format("gameConfig.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i))) {
-                lines.add(new TranslatableText(String.format("gameConfig.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i)).formatted(Formatting.ITALIC, Formatting.DARK_PURPLE));
+    public static ConfiguredGame<?>[] getConfigsFromType(GameType<?> type) {
+        List<ConfiguredGame<?>> configs = new ArrayList<>();
+        for (Identifier id : GameConfigs.getKeys()) {
+            ConfiguredGame<?> game = GameConfigs.get(id);
+            if (game.getType() == type) {
+                configs.add(game);
             }
         }
-        return lines.toArray(new Text[0]);
+        return configs.toArray(new ConfiguredGame[0]);
     }
 
-    public static Supplier<ItemStack> getGameInfos(Identifier identifier) {
-        return getGameInfos(identifier.toString());
-    }
-
-    public static Identifier[] getConfigsFromType(Identifier identifier) {
-        List<Identifier> configs = new ArrayList<>();
-        for (Identifier configuredGameID : GameConfigs.getKeys()) {
-            ConfiguredGame<?> configuredGame = GameConfigs.get(configuredGameID);
-            if (configuredGame.getType().getIdentifier() == identifier) configs.add(configuredGameID);
+    public static boolean hasConfigsForType(GameType<?> type) {
+        for (Identifier id : GameConfigs.getKeys()) {
+            ConfiguredGame<?> game = GameConfigs.get(id);
+            if (game.getType() == type) {
+                return true;
+            }
         }
-        return configs.toArray(new Identifier[0]);
+        return false;
     }
 }

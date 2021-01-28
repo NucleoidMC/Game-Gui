@@ -11,30 +11,32 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import xyz.nucleoid.plasmid.game.GameType;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 
 public class CreateGameTypeEntry extends GuiEntry {
-    private Identifier gameType;
+    private GameType<?> gameType;
 
     public CreateGameTypeEntry(ItemStack icon) {
         super(icon);
     }
 
-    public CreateGameTypeEntry withGameType(Identifier gameType) {
+    public CreateGameTypeEntry withGameType(GameType<?> gameType) {
         this.gameType = gameType;
         return this;
     }
 
+    @Override
     public ItemStack createIcon(ServerPlayerEntity player) {
         ItemStackBuilder builder = ItemStackBuilder.of(this.getIcon());
-        builder.setName(GameGui.getGameTypeName(this.gameType));
-        for (Text text : GameGui.getGameTypeDescription(this.gameType)) {
+        builder.setName(this.gameType.getName());
+        for (Text text : GameGui.getGameTypeDescription(this.gameType.getIdentifier())) {
             builder.addLore(text);
         }
         return builder.build().copy();
     }
 
+    @Override
     public void onClick(ServerPlayerEntity player) {
         CompoundTag codecNBT = GameTypeCoderNBTRegistry.getCodecNBT(this.gameType);
         if (codecNBT.getKeys().size() == 0) return;

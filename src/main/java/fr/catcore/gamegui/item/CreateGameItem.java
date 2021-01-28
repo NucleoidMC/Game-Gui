@@ -3,7 +3,6 @@ package fr.catcore.gamegui.item;
 import fr.catcore.gamegui.GameGui;
 import fr.catcore.gamegui.builder.GuiEntry;
 import fr.catcore.gamegui.ui.CreateGameTypeUi;
-import fr.catcore.gamegui.ui.OpenGameTypeUi;
 import fr.catcore.gamegui.util.Utils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -13,7 +12,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import xyz.nucleoid.plasmid.fake.FakeItem;
@@ -43,9 +41,12 @@ public final class CreateGameItem extends Item implements FakeItem {
 
     public static void openOpenScreen(PlayerEntity playerEntity) {
         playerEntity.openHandledScreen(CreateGameTypeUi.create(new TranslatableText("text.game_gui.gui.create"), openGameTypeBuilder -> {
-            for (Identifier gameType : GameType.REGISTRY.keySet()) {
-                if (gameType.toString().equals("plasmid:test")) continue;
-                openGameTypeBuilder.add(GuiEntry.createGameTypeEntryOf(GameGui.getGameInfos(gameType).get()).withGameType(gameType));
+            for (GameType<?> gameType : GameType.REGISTRY.values()) {
+                if (!GameGui.hasConfigsForType(gameType)) {
+                    continue;
+                }
+                ItemStack icon = GameGui.getGameInfos(gameType.getIdentifier()).get();
+                openGameTypeBuilder.add(GuiEntry.createGameTypeEntryOf(icon).withGameType(gameType));
             }
         }));
     }
