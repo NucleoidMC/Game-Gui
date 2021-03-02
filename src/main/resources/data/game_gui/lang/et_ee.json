@@ -1,0 +1,9 @@
+{
+  "text.game_gui.join.config": "Mänguseadistus: %s",
+  "text.game_gui.join.type": "Mängutüüp: %s",
+  "text.game_gui.join.player_count": "Mängijate arv: %s",
+
+  "text.game_gui.gui.join": "Liitu mänguga",
+  "text.game_gui.gui.open": "Ava mäng",
+  "text.game_gui.gui.create": "Loo mäng"
+}
