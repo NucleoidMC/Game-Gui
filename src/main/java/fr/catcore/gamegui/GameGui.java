@@ -112,8 +112,8 @@ public class GameGui implements ModInitializer {
         List<Text> lines = new ArrayList<>();
         for (int i = 0; i <= 10; i++) {
             if (ServerTranslations.INSTANCE.getLanguage("en_us")
-                    .remote.contains(String.format("gameType.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i))) {
-                lines.add(new TranslatableText(String.format("gameType.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i)).formatted(Formatting.ITALIC, Formatting.DARK_PURPLE));
+                    .remote.contains(String.format("game.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i))) {
+                lines.add(new TranslatableText(String.format("game.%s.%s.desc.%s", gameTypeID.getNamespace(), gameTypeID.getPath(), i)).formatted(Formatting.ITALIC, Formatting.DARK_PURPLE));
             }
         }
         return lines.toArray(new Text[0]);
