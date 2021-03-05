@@ -30,28 +30,17 @@ import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
-public class StringPropertyEditingUi implements NamedScreenHandlerFactory {
-    private final Text title;
-    private final Consumer<CodecGuiBuilder> builder;
+public class StringPropertyEditingUi extends CallBackUi {
 
-    StringPropertyEditingUi(Text title, Consumer<CodecGuiBuilder> builder) {
-        this.title = title;
-        this.builder = builder;
-    }
-
-    public static StringPropertyEditingUi create(Text title, Consumer<CodecGuiBuilder> builder) {
-        return new StringPropertyEditingUi(title, builder);
-    }
-
-    public Text getDisplayName() {
-        return this.title;
+    public StringPropertyEditingUi(Text title, Consumer<CodecGuiBuilder> builder, Function<Void, NamedScreenHandlerFactory> callback) {
+        super(title, builder, callback);
     }
 
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
         final ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
-        StringPropertyInventory inventory = new StringPropertyInventory(
-                GameCreatorHelper.getEditingFieldValue(player.getUuid()).asString(), serverPlayer, this.builder);
+        StringPropertyInventory inventory = new StringPropertyInventory(serverPlayer, this.getBuilder());
 
         AnvilScreenHandler anvilScreenHandler = new AnvilScreenHandler(syncId, playerInventory, ScreenHandlerContext.EMPTY) {
             public ItemStack transferSlot(PlayerEntity player, int invSlot) {
@@ -65,6 +54,17 @@ public class StringPropertyEditingUi implements NamedScreenHandlerFactory {
                     return ItemStack.EMPTY;
                 }
 
+                if (slot == 2) {
+                    this.input.setStack(0, ItemStack.EMPTY);
+                    this.input.setStack(1, ItemStack.EMPTY);
+                    String newValue = this.output.getStack(0).getName().asString();
+
+                    GameCreatorHelper.setCurrentlyEditedValue(player.getUuid(), newValue);
+                    player.openHandledScreen(StringPropertyEditingUi.this.getCallback().apply(null));
+
+                    return ItemStack.EMPTY;
+                }
+
                 return super.onSlotClick(slot, data, action, player);
             }
 
@@ -74,19 +74,6 @@ public class StringPropertyEditingUi implements NamedScreenHandlerFactory {
 
             @Override
             protected ItemStack onTakeOutput(PlayerEntity player, ItemStack stack) {
-                this.input.setStack(0, ItemStack.EMPTY);
-                this.input.setStack(1, ItemStack.EMPTY);
-
-                String newValue = stack.getName().asString();
-                GameCreatorHelper.setEditingFieldValue(player.getUuid(), StringTag.of(newValue));
-                if (GameCreatorHelper.getEditingField(player.getUuid()).equals("name")) {
-                    player.openHandledScreen(ConfigureGameMainUi.create(new LiteralText("Configure Game: Main"), mainGuiEntryCodecGuiBuilder -> {
-                        mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createType());
-                        mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createName());
-                        mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createConfig());
-                        mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createLaunch());
-                    }));
-                }
 
                 return ItemStack.EMPTY;
             }
@@ -101,7 +88,7 @@ public class StringPropertyEditingUi implements NamedScreenHandlerFactory {
                     this.output.setStack(0, ItemStack.EMPTY);
                 } else {
                     ItemStack itemStack2 = itemStack.copy();
-                    ItemStack itemStack3 = this.input.getStack(1);
+                    ItemStack itemStack3 = ItemStack.EMPTY;
                     Map<Enchantment, Integer> map = EnchantmentHelper.get(itemStack2);
                     j = j + itemStack.getRepairCost() + (itemStack3.isEmpty() ? 0 : itemStack3.getRepairCost());
                     ((AnvilScreenHandlerAccessor)(Object)this).setRepairItemUsage(0);
