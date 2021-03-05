@@ -50,26 +50,8 @@ public class StringPropertyEditingUi implements NamedScreenHandlerFactory {
 
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
         final ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
-        StringPropertyInventory inventory = new StringPropertyInventory(GameCreatorHelper.getEditingFieldValue(player.getUuid()).asString(), serverPlayer, this.builder);
-//        return new GenericContainerScreenHandler(ScreenHandlerType.GENERIC_9X6, syncId, playerInventory, inventory, 6) {
-//            public ItemStack transferSlot(PlayerEntity player, int invSlot) {
-//                this.resendInventory();
-//                return ItemStack.EMPTY;
-//            }
-//
-//            public ItemStack onSlotClick(int slot, int data, SlotActionType action, PlayerEntity player) {
-//                if (action == SlotActionType.SWAP || action == SlotActionType.THROW || action == SlotActionType.CLONE) {
-//                    this.resendInventory();
-//                    return ItemStack.EMPTY;
-//                }
-//
-//                return super.onSlotClick(slot, data, action, player);
-//            }
-//
-//            private void resendInventory() {
-//                serverPlayer.onHandlerRegistered(this, this.getStacks());
-//            }
-//        };
+        StringPropertyInventory inventory = new StringPropertyInventory(
+                GameCreatorHelper.getEditingFieldValue(player.getUuid()).asString(), serverPlayer, this.builder);
 
         AnvilScreenHandler anvilScreenHandler = new AnvilScreenHandler(syncId, playerInventory, ScreenHandlerContext.EMPTY) {
             public ItemStack transferSlot(PlayerEntity player, int invSlot) {

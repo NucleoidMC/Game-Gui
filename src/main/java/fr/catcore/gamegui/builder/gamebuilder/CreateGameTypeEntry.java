@@ -1,10 +1,12 @@
 package fr.catcore.gamegui.builder.gamebuilder;
 
 import fr.catcore.gamegui.GameGui;
+import fr.catcore.gamegui.accessor.GenericContainerScreenHandlerAccessor;
 import fr.catcore.gamegui.builder.GuiEntry;
 import fr.catcore.gamegui.builder.gamebuilder.main.MainGuiEntry;
 import fr.catcore.gamegui.codec.GameCreatorHelper;
 import fr.catcore.gamegui.codec.GameTypeCoderNBTRegistry;
+import fr.catcore.gamegui.inventory.codec.ConfigureGameMainInventory;
 import fr.catcore.gamegui.ui.codec.ConfigureGameMainUi;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -40,20 +42,28 @@ public class CreateGameTypeEntry extends GuiEntry {
     public void onClick(ServerPlayerEntity player) {
         CompoundTag codecNBT = GameTypeCoderNBTRegistry.getCodecNBT(this.gameType);
         if (codecNBT.getKeys().size() == 0) return;
-
+        System.out.println(codecNBT.toString());
         CompoundTag currentConfig = new CompoundTag();
-        currentConfig.putString("type", this.gameType.toString());
-        currentConfig.putString("name", this.gameType.toString());
+        currentConfig.putString("type", this.gameType.getIdentifier().toString());
+        currentConfig.putString("name", this.gameType.getName().getString());
 
         GameCreatorHelper.startCreatingConfig(player.getUuid(), currentConfig);
 
-        player.closeHandledScreen();
-        player.openHandledScreen(ConfigureGameMainUi.create(new LiteralText("Configure Game: Main"), mainGuiEntryCodecGuiBuilder -> {
+//        player.closeHandledScreen();
+//        player.openHandledScreen(ConfigureGameMainUi.create(new LiteralText("Configure Game: Main"), mainGuiEntryCodecGuiBuilder -> {
+//            mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createType());
+//            mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createName());
+//            mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createConfig());
+//            mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createLaunch());
+//        }));
+
+        ConfigureGameMainInventory configureGameMainInventory = new ConfigureGameMainInventory(player, mainGuiEntryCodecGuiBuilder -> {
             mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createType());
             mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createName());
             mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createConfig());
             mainGuiEntryCodecGuiBuilder.add(MainGuiEntry.createLaunch());
-        }));
+        });
+        ((GenericContainerScreenHandlerAccessor)player.currentScreenHandler).setInventory(configureGameMainInventory, player);
 
 //        System.out.println(((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().toString());
 //        System.out.println(((MapCodec.MapCodecCodec)GameType.get(this.gameType).getConfigCodec()).codec().getClass().toString());

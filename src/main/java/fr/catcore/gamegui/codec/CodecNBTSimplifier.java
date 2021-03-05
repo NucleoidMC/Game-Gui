@@ -152,7 +152,9 @@ public class CodecNBTSimplifier {
 
     public static CompoundTag simplifyCodecNBT(CompoundTag codecNBT) {
         CodecNBTSimplifier codecNBTSimplifier = new CodecNBTSimplifier(codecNBT);
-
+        if (codecNBTSimplifier.simplifiedNBT.contains("optional")) {
+            codecNBTSimplifier.simplifiedNBT.remove("optional");
+        }
         return codecNBTSimplifier.simplifiedNBT;
     }
 }
