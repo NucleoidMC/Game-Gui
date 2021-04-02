@@ -234,6 +234,11 @@ public class StringPropertyEditingUi extends CallBackUi {
             protected boolean canTakeOutput(PlayerEntity player, boolean present) {
                 return true;
             }
+
+            @Override
+            public boolean isNotRestricted(PlayerEntity player) {
+                return true;
+            }
         };
         ((ForgingScreenHandlerAccessor)anvilScreenHandler).setInventory(inventory, (ServerPlayerEntity) player);
         return anvilScreenHandler;
