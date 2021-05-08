@@ -55,6 +55,11 @@ public class CreateGameTypeUi implements NamedScreenHandlerFactory {
             private void resendInventory() {
                 serverPlayer.onHandlerRegistered(this, this.getStacks());
             }
+
+            @Override
+            public boolean isNotRestricted(PlayerEntity player) {
+                return true;
+            }
         };
     }
 }
