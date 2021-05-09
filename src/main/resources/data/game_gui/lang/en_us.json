@@ -5,5 +5,18 @@
 
   "text.game_gui.gui.join": "Join Game",
   "text.game_gui.gui.open": "Open Game",
-  "text.game_gui.gui.create": "Create Game"
+  "text.game_gui.gui.create": "Create Game",
+
+  "text.game_gui.codec.type": "Type: %s",
+  "text.game_gui.codec.type.object": "Object",
+  "text.game_gui.codec.type.integer": "Integer",
+  "text.game_gui.codec.type.boolean": "Boolean",
+  "text.game_gui.codec.type.resource_key": "Resource Key",
+  "text.game_gui.codec.type.string": "String",
+  "text.game_gui.codec.type.list": "List",
+  "text.game_gui.codec.type.either": "Either",
+  "text.game_gui.codec.type.long": "Long",
+  "text.game_gui.codec.type.double": "Double",
+  "text.game_gui.codec.type.float": "Float",
+  "text.game_gui.codec.mandatory": "Mandatory"
 }
