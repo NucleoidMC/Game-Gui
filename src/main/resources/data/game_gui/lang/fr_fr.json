@@ -1,7 +1,7 @@
 {
   "text.game_gui.join.config": "Configuration de jeu : %s",
   "text.game_gui.join.type": "Type de jeu : %s",
-  "text.game_gui.join.player_count": "Nombre de joueur : %s",
+  "text.game_gui.join.player_count": "Nombre de joueurs : %s",
 
   "text.game_gui.gui.join": "Rejoindre un jeu",
   "text.game_gui.gui.open": "Ouvrir un jeu",
