@@ -104,9 +104,9 @@ public abstract class PagedGameGUIInventory<B extends GuiBuilder> extends GameGU
     }
 
     public int getPageNumber() {
-        List<GuiEntry> compelteEList = this.getElements();
+        List<GuiEntry> completeEList = this.getElements();
         int page = -1;
-        for (int i = 0; i < compelteEList.size(); i++) {
+        for (int i = 0; i < completeEList.size(); i++) {
             if (i % 28 == 0) page++;
         }
 

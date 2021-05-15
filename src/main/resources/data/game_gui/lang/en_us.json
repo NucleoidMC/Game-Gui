@@ -6,6 +6,7 @@
   "text.game_gui.gui.join": "Join Game",
   "text.game_gui.gui.open": "Open Game",
   "text.game_gui.gui.create": "Create Game",
+  "text.game_gui.gui.back": "Back",
 
   "text.game_gui.codec.type": "Type: %s",
   "text.game_gui.codec.type.object": "Object",
