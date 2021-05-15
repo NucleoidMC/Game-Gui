@@ -74,14 +74,18 @@ public class OpenConfiguredGameEntry extends GuiEntry {
     }
 
     private static void onOpenSuccess(GameChannel channel, ServerPlayerEntity playerEntity, ConfiguredGame<?> game, PlayerManager playerManager) {
-        Text openMessage = new TranslatableText("text.plasmid.game.open.opened", playerEntity.getDisplayName(), game.getNameText().shallowCopy().append(channel.createJoinLink()));
+        Text openMessage = new TranslatableText("text.plasmid.game.open.opened", playerEntity.getDisplayName(), game.getNameText().shallowCopy().formatted(Formatting.GRAY)
+                .append(channel.createJoinLink()));
         playerManager.broadcastChatMessage(openMessage, MessageType.SYSTEM, Util.NIL_UUID);
     }
 
     private static void onOpenError(PlayerManager playerManager, Throwable throwable) {
         Plasmid.LOGGER.error("Failed to start game", throwable);
+
+        GameOpenException gameOpenException = GameOpenException.unwrap(throwable);
+
         MutableText message;
-        if (throwable instanceof GameOpenException) {
+        if (gameOpenException != null) {
             message = ((GameOpenException) throwable).getReason().shallowCopy();
         } else {
             message = new TranslatableText("text.plasmid.game.open.error");
