@@ -13,8 +13,8 @@ public abstract class GuiEntry {
         this.icon = icon;
     }
 
-    public static JoinGameEntry joinGameEntryOf(GameConfigMetadata config) {
-        return new JoinGameEntry(config);
+    public static JoinOpenedGameEntry joinGameEntryOf(GameConfigMetadata config) {
+        return new JoinOpenedGameEntry(config);
     }
 
     public static OpenConfiguredGameEntry openConfiguredGameEntryOf(GameConfigMetadata config) {

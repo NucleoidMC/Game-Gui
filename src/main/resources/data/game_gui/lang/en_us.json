@@ -4,6 +4,8 @@
   "text.game_gui.join.player_count": "Player count: %s",
 
   "text.game_gui.gui.join": "Join Game",
+  "text.game_gui.gui.join.opened": "Join Opened Game",
+  "text.game_gui.gui.join.channel": "Join Game Channel",
   "text.game_gui.gui.open": "Open Game",
   "text.game_gui.gui.create": "Create Game",
   "text.game_gui.gui.back": "Back",

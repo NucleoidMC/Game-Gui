@@ -1,7 +1,6 @@
 package fr.catcore.gamegui.ui;
 
 import fr.catcore.gamegui.builder.JoinOpenedGameBuilder;
-import fr.catcore.gamegui.inventory.JoinGameInventory;
 import fr.catcore.gamegui.inventory.JoinOpenedGameInventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -16,15 +15,17 @@ import net.minecraft.text.Text;
 
 import java.util.function.Consumer;
 
-public class JoinGameUi implements NamedScreenHandlerFactory {
+public class JoinOpenedGameUi implements NamedScreenHandlerFactory {
     private final Text title;
+    private final Consumer<JoinOpenedGameBuilder> builder;
 
-    JoinGameUi(Text title) {
+    JoinOpenedGameUi(Text title, Consumer<JoinOpenedGameBuilder> builder) {
         this.title = title;
+        this.builder = builder;
     }
 
-    public static JoinGameUi create(Text title) {
-        return new JoinGameUi(title);
+    public static JoinOpenedGameUi create(Text title, Consumer<JoinOpenedGameBuilder> builder) {
+        return new JoinOpenedGameUi(title, builder);
     }
 
     public Text getDisplayName() {
@@ -33,8 +34,8 @@ public class JoinGameUi implements NamedScreenHandlerFactory {
 
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
         final ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
-        JoinGameInventory inventory = new JoinGameInventory(serverPlayer);
-        return new GenericContainerScreenHandler(ScreenHandlerType.GENERIC_9X1, syncId, playerInventory, inventory, 1) {
+        JoinOpenedGameInventory inventory = new JoinOpenedGameInventory(serverPlayer, this.builder);
+        return new GenericContainerScreenHandler(ScreenHandlerType.GENERIC_9X6, syncId, playerInventory, inventory, 6) {
             public ItemStack transferSlot(PlayerEntity player, int invSlot) {
                 this.resendInventory();
                 return ItemStack.EMPTY;
