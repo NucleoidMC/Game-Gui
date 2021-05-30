@@ -4,6 +4,9 @@
   "text.game_gui.join.player_count": "Mängijate arv: %s",
 
   "text.game_gui.gui.join": "Liitu mänguga",
+  "text.game_gui.gui.join.opened": "Liitu avatud mänguga",
+  "text.game_gui.gui.join.channel": "Liitu mängukanaliga",
   "text.game_gui.gui.open": "Ava mäng",
-  "text.game_gui.gui.create": "Loo mäng"
+  "text.game_gui.gui.create": "Loo mäng",
+  "text.game_gui.gui.back": "Tagasi"
 }
