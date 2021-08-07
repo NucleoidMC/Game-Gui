@@ -36,7 +36,7 @@ dependencies {
 //    }
 
     // Test Minigames
-    modRuntime ("com.github.NucleoidMC:D-Coudre:1.16-SNAPSHOT")
+//    modRuntime ("com.github.NucleoidMC:D-Coudre:1.16-SNAPSHOT")
 //    modRuntime ("com.github.NucleoidMC:koth:-SNAPSHOT")
 //    modRuntime ("com.github.NucleoidMC:Creeperfall:-SNAPSHOT")
 //    modRuntime ("com.github.NucleoidMC:cavern-crawler:-SNAPSHOT")
