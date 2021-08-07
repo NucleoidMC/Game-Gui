@@ -1,10 +1,10 @@
 plugins {
-    id 'fabric-loom' version '0.6-SNAPSHOT'
+    id 'fabric-loom' version '0.9-SNAPSHOT'
     id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -13,7 +13,7 @@ group = project.maven_group
 repositories {
     mavenLocal()
     maven { url = "https://maven.nucleoid.xyz/" }
-    maven { url = "https://jitpack.io/" }
+//    maven { url = "https://jitpack.io/" }
 }
 
 dependencies {
@@ -25,7 +25,7 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modApi "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modImplementation "xyz.nucleoid:plasmid:0.4.146"
+    modImplementation "xyz.nucleoid:plasmid:0.5-pre29+1.17.1"
 
 //    modRuntime ("com.github.jellysquid3:sodium-fabric:b9c2ad3c38b16275cf2f1a81dcfb2fee1563905b")
 //    modRuntime ("com.github.jellysquid3:phosphor-fabric:0749029a498e8f6574643285bae7aecb2eda76b8")

@@ -22,7 +22,7 @@
   "depends": {
     "fabricloader": ">=0.9.1+build.205",
     "fabric": "*",
-    "minecraft": ">=1.16.1",
-    "plasmid": ">=0.4.146"
+    "minecraft": ">=1.17",
+    "plasmid": ">=0.5"
   }
 }
