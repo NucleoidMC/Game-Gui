@@ -48,20 +48,4 @@ public class Utils {
 
         return null;
     }
-
-    public static Slot createAnonymousSlot(ForgingScreenHandler forgingScreenHandler) {
-        return new Slot(((ForgingScreenHandlerAccessor)forgingScreenHandler).getCraftingResult(), 2, 134, 47) {
-            public boolean canInsert(ItemStack stack) {
-                return false;
-            }
-
-            public boolean canTakeItems(PlayerEntity playerEntity) {
-                return ((ForgingScreenHandlerAccessor)forgingScreenHandler).canTakeOutput_public(playerEntity, this.hasStack());
-            }
-
-            public ItemStack onTakeItem(PlayerEntity player, ItemStack stack) {
-                return ((ForgingScreenHandlerAccessor)forgingScreenHandler).onTakeOutput_public(player, stack);
-            }
-        };
-    }
 }

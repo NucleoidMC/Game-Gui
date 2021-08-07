@@ -2,13 +2,9 @@
   "required": true,
   "minVersion": "0.8",
   "package": "fr.catcore.gamegui.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "MixinAnvilScreenHandler",
-    "MixinForgingScreenHandler",
-    "MixinGenericContainerGenericContainerScreenHandler",
-    "MixinPlayerManager",
-    "MixinScreenHandler"
+    "MixinPlayerManager"
   ],
   "client": [
   ],

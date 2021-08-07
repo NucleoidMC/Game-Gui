@@ -5,7 +5,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import fr.catcore.gamegui.item.CreateGameItem;
 import fr.catcore.gamegui.item.JoinGameItem;
 import fr.catcore.gamegui.item.OpenGameItem;
 import fr.catcore.gamegui.util.Utils;
@@ -23,8 +22,7 @@ public class GameGuiCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("gamegui")
                 .then(CommandManager.literal("join").executes(GameGuiCommand::joinGame))
-                .then(CommandManager.literal("open").executes(GameGuiCommand::openGame))
-                .then(CommandManager.literal("create").executes(GameGuiCommand::createGame)));
+                .then(CommandManager.literal("open").executes(GameGuiCommand::openGame)));
     }
 
     private static int joinGame(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
@@ -39,14 +37,6 @@ public class GameGuiCommand {
         ServerPlayerEntity player = source.getPlayer();
         if (!Utils.hasOpenPermission(player)) throw NOT_ENOUGH_PERMISSION.create();
         OpenGameItem.openOpenScreen(player);
-        return Command.SINGLE_SUCCESS;
-    }
-
-    private static int createGame(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerCommandSource source = context.getSource();
-        ServerPlayerEntity player = source.getPlayer();
-        if (!Utils.hasOpenPermission(player)) throw NOT_ENOUGH_PERMISSION.create();
-        CreateGameItem.openOpenScreen(player);
         return Command.SINGLE_SUCCESS;
     }
 

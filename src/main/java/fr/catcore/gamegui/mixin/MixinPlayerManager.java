@@ -17,18 +17,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerManager.class)
 public class MixinPlayerManager {
 
-    @Shadow @Final private MinecraftServer server;
-
     @Inject(at = @At("RETURN"), method = "onPlayerConnect")
     private void addCustomItem(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci) {
         ItemStack openGame = new ItemStack(GameGuiCustomItems.OPEN_GAME);
-        if (!player.inventory.contains(openGame) && Utils.hasOpenPermission(player)) {
-            player.inventory.insertStack(openGame);
+        if (!player.getInventory().contains(openGame) && Utils.hasOpenPermission(player)) {
+            player.getInventory().insertStack(openGame);
         }
 
         ItemStack joinGame = new ItemStack(GameGuiCustomItems.JOIN_GAME);
-        if (!player.inventory.contains(joinGame)) {
-            player.inventory.insertStack(joinGame);
+        if (!player.getInventory().contains(joinGame)) {
+            player.getInventory().insertStack(joinGame);
         }
     }
 }
