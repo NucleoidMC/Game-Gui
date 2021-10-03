@@ -1,9 +1,6 @@
 package fr.catcore.gamegui.item;
 
-import fr.catcore.gamegui.GameConfigMetadata;
-import fr.catcore.gamegui.builder.GuiEntry;
-import fr.catcore.gamegui.ui.JoinGameUi;
-import fr.catcore.gamegui.ui.JoinOpenedGameUi;
+import eu.pb4.polymer.item.VirtualItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,10 +10,8 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
-import xyz.nucleoid.plasmid.fake.FakeItem;
-import xyz.nucleoid.plasmid.game.ManagedGameSpace;
 
-public final class JoinGameItem extends Item implements FakeItem {
+public final class JoinGameItem extends Item implements VirtualItem {
 
     public JoinGameItem(Settings settings) {
         super(settings);
@@ -39,23 +34,11 @@ public final class JoinGameItem extends Item implements FakeItem {
     }
 
     public static void openJoinScreen(PlayerEntity playerEntity) {
-        playerEntity.openHandledScreen(JoinGameUi.create(new TranslatableText("text.game_gui.gui.join")));
-    }
-
-    public static void openJoinOpenedScreen(PlayerEntity playerEntity) {
-        playerEntity.openHandledScreen(JoinOpenedGameUi.create(new TranslatableText("text.game_gui.gui.join"), joinGameBuilder -> {
-            for (ManagedGameSpace gameSpace : ManagedGameSpace.getOpen()) {
-                GameConfigMetadata config = GameConfigMetadata.parse(gameSpace.getGameConfig());
-                joinGameBuilder.add(
-                        GuiEntry.joinGameEntryOf(config)
-                                .withGameSpace(gameSpace)
-                );
-            }
-        }));
+        playerEntity.getServer().getCommandManager().execute(playerEntity.getCommandSource(), "/game join");
     }
 
     @Override
-    public Item asProxy() {
+    public Item getVirtualItem() {
         return Items.COMPASS;
     }
 }

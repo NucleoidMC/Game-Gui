@@ -20,9 +20,9 @@
     "game_gui.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.9.1+build.205",
+    "fabricloader": ">=0.11.0",
     "fabric": "*",
-    "minecraft": ">=1.17",
-    "plasmid": ">=0.5"
+    "minecraft": "1.17.x",
+    "plasmid": "0.5.x"
   }
 }

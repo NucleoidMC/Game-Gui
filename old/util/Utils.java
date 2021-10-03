@@ -1,6 +1,11 @@
 package fr.catcore.gamegui.util;
 
 import com.mojang.brigadier.tree.CommandNode;
+import fr.catcore.gamegui.accessor.ForgingScreenHandlerAccessor;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.ForgingScreenHandler;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
