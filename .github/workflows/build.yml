@@ -1,8 +1,6 @@
 name: Build
 
-on:
-  push:
-    branches: [ 'master', 'main', '1.16', '1.17', '!*/*' ]
+on: push
 
 jobs:
   build:
@@ -34,4 +32,3 @@ jobs:
         with:
           name: artifacts
           path: build/libs
-          retention-days: 30
